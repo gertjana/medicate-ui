@@ -1,11 +1,11 @@
 module Pages.Home_ exposing (Model, Msg, page)
 
 import Api exposing (Data(..))
-import Api.MedicateApi exposing (..)
+import Api.MedicateApi exposing (getMedicines, getSchedules, getDailySchedule)
 import Html exposing (..)
 import Html.Attributes exposing (class)
 import Http
-import Models.CombinedSchedules exposing (CombinedSchedules)
+import Models.DailySchedule exposing (DailySchedule)
 import Models.Medicines exposing (Medicines)
 import Models.Schedules exposing (Schedules)
 import Page exposing (Page)
@@ -27,7 +27,7 @@ page =
 type alias Model =
     { medicineData : Api.Data Medicines
     , scheduleData : Api.Data Schedules
-    , combinedData : Api.Data CombinedSchedules
+    , combinedData : Api.Data DailySchedule
     }
 
 
@@ -40,7 +40,7 @@ init =
     , Cmd.batch
         [ Api.MedicateApi.getMedicines { onResponse = MedicineApiResponded }
         , Api.MedicateApi.getSchedules { onResponse = ScheduleApiResponded }
-        , Api.MedicateApi.getCombinedSchedules { onResponse = CombinedApiResponded }
+        , Api.MedicateApi.getDailySchedule { onResponse = DailyScheduleApiResponded }
         ]
     )
 
@@ -48,7 +48,7 @@ init =
 type Msg
     = MedicineApiResponded (Result Http.Error Medicines)
     | ScheduleApiResponded (Result Http.Error Schedules)
-    | CombinedApiResponded (Result Http.Error CombinedSchedules)
+    | DailyScheduleApiResponded (Result Http.Error DailySchedule)
     | AddMedicine
     | TakeDose
 
@@ -56,18 +56,18 @@ type Msg
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
-        MedicineApiResponded (Ok listOfMedicines) ->
-            ( { model | medicineData = Api.Success listOfMedicines }
+        MedicineApiResponded (Ok medicines) ->
+            ( { model | medicineData = Api.Success medicines }
             , Cmd.none
             )
 
-        ScheduleApiResponded (Ok listOfSchedules) ->
-            ( { model | scheduleData = Api.Success listOfSchedules }
+        ScheduleApiResponded (Ok schedules) ->
+            ( { model | scheduleData = Api.Success schedules }
             , Cmd.none
             )
 
-        CombinedApiResponded (Ok listOfCombinedSchedules) ->
-            ( { model | combinedData = Api.Success listOfCombinedSchedules }
+        DailyScheduleApiResponded (Ok dailySchedule) ->
+            ( { model | combinedData = Api.Success dailySchedule }
             , Cmd.none
             )
 
@@ -81,7 +81,7 @@ update msg model =
             , Cmd.none
             )
 
-        CombinedApiResponded (Err httpError) ->
+        DailyScheduleApiResponded (Err httpError) ->
             ( { model | combinedData = Api.Failure httpError }
             , Cmd.none
             )
@@ -98,8 +98,10 @@ subscriptions _ =
     Sub.none
 
 
-medicine_content : Model -> Html Msg
-medicine_content model =
+-- Views
+
+medicineContent : Model -> Html Msg
+medicineContent model =
     case model.medicineData of
         Api.Loading ->
             div [] [ text "Loading..." ]
@@ -111,12 +113,8 @@ medicine_content model =
             div [] [ text "Something went wrong: " ]
 
 
-
--- ++ Debug.toString httpError) ]
-
-
-schedule_content : Model -> Html Msg
-schedule_content model =
+scheduleContent : Model -> Html Msg
+scheduleContent model =
     case model.scheduleData of
         Api.Loading ->
             div [] [ text "Loading..." ]
@@ -128,14 +126,14 @@ schedule_content model =
             div [] [ text ("Something went wrong: " ++ Debug.toString httpError) ]
 
 
-combined_content : Model -> Html Msg
-combined_content model =
+dailysheduleContent : Model -> Html Msg
+dailysheduleContent model =
     case model.combinedData of
         Api.Loading ->
             div [] [ text "Loading..." ]
 
-        Api.Success combinedScheduleList ->
-            Models.CombinedSchedules.viewCombinedSchedules combinedScheduleList
+        Api.Success dailyScheduleList ->
+            Models.DailySchedule.viewDailySchedule dailyScheduleList 
 
         Api.Failure httpError ->
             div [] [ text ("Something went wrong: " ++ Debug.toString httpError) ]
@@ -148,15 +146,15 @@ contentView model =
             [ headerView ]
         , div [ class "col-md-8 content" ]
             [ h3 [] [ text "Medicines" ]
-            , medicine_content model
+            , medicineContent model
             ]
         , div [ class "col-md-4 content" ]
             [ h3 [] [ text "Daily Schedule" ]
-            , combined_content model
+            , dailysheduleContent model
             ]
-        , div [class "col-md-10 content" ]
+        , div [class "col-md-4 content" ]
           [ h3 [] [ text "Schedules"]
-         , schedule_content model ]
+         , scheduleContent model ]
         , div [ class "col-md-12 footer" ]
             [ footerView ]
         ]

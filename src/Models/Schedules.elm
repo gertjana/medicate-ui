@@ -33,12 +33,14 @@ scheduleListDecoder =
 
 viewSchedules : Schedules -> Html msg
 viewSchedules schedules =
-    table [ class "table table-striped table-condensed table-hover" ]
-        [ tr []
-            [ th [ class "col-md-1" ] [ text "Id" ]
-            , th [ class "col-md-1" ] [ text "Time" ]
-            , th [ class "col-md-1" ] [ text "Medicines" ]
-            , th [ class "col-md-1" ] [ text "Amount" ]
+    table [ class "table table-striped table-condensed table-hover table-bordered" ]
+        [ thead [class "thead-dark"]
+            [ tr []
+                [ th [ class "col-md-1" ] [ text "Id" ]
+                , th [ class "col-md-1" ] [ text "Time" ]
+                , th [ class "col-md-1" ] [ text "Medicines" ]
+                , th [ class "col-md-1" ] [ text "Amount" ]
+                ]
             ]
         , tbody [] (List.map (\l -> viewSchedule l) schedules)
         ]

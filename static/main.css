@@ -28,6 +28,7 @@ table.medicines td:last-child a {
 
 ul {
   list-style-type: none;
+  padding-inline-start: 0;
 }
 
 table thead.thead-dark {

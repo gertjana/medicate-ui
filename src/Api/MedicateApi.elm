@@ -1,7 +1,7 @@
-module Api.MedicateApi exposing (getCombinedSchedules, getMedicines, getSchedules)
+module Api.MedicateApi exposing (getDailySchedule, getMedicines, getSchedules)
 
 import Http
-import Models.CombinedSchedules exposing (CombinedSchedules, combinedSchedulesDecoder)
+import Models.DailySchedule exposing (DailySchedule, dailyScheduleDecoder)
 import Models.Medicines exposing (Medicines, medicineListDecoder)
 import Models.Schedules exposing (Schedules, scheduleListDecoder)
 
@@ -22,9 +22,9 @@ getSchedules options =
         }
 
 
-getCombinedSchedules : { onResponse : Result Http.Error CombinedSchedules -> msg } -> Cmd msg
-getCombinedSchedules options =
+getDailySchedule : { onResponse : Result Http.Error DailySchedule -> msg } -> Cmd msg
+getDailySchedule options =
     Http.get
         { url = "http://localhost:8080/schedules/combined"
-        , expect = Http.expectJson options.onResponse combinedSchedulesDecoder
+        , expect = Http.expectJson options.onResponse dailyScheduleDecoder
         }
