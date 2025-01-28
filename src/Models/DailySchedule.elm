@@ -84,7 +84,7 @@ viewDailyScheduleEntry cs =
 
 viewDailySchedule : DailySchedule -> Html msg
 viewDailySchedule css =
-    table [ class "combined table table-striped table-condensed table-hover table-bordered" ]
+    table [ class "dailyschedule table table-striped table-condensed table-hover table-bordered" ]
         [ thead [ class "thead-dark" ]
             [ tr []
                 [ th [ class "col-md-1" ] [ text "Time" ]

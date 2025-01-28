@@ -27,7 +27,7 @@ page =
 type alias Model =
     { medicineData : Api.Data Medicines
     , scheduleData : Api.Data Schedules
-    , combinedData : Api.Data DailySchedule
+    , dailyScheduleData : Api.Data DailySchedule
     }
 
 
@@ -35,7 +35,7 @@ init : ( Model, Cmd Msg )
 init =
     ( { medicineData = Api.Loading
       , scheduleData = Api.Loading
-      , combinedData = Api.Loading
+      , dailyScheduleData = Api.Loading
       }
     , Cmd.batch
         [ Api.MedicateApi.getMedicines { onResponse = MedicineApiResponded }
@@ -67,7 +67,7 @@ update msg model =
             )
 
         DailyScheduleApiResponded (Ok dailySchedule) ->
-            ( { model | combinedData = Api.Success dailySchedule }
+            ( { model | dailyScheduleData = Api.Success dailySchedule }
             , Cmd.none
             )
 
@@ -82,7 +82,7 @@ update msg model =
             )
 
         DailyScheduleApiResponded (Err httpError) ->
-            ( { model | combinedData = Api.Failure httpError }
+            ( { model | dailyScheduleData = Api.Failure httpError }
             , Cmd.none
             )
 
@@ -128,7 +128,7 @@ scheduleContent model =
 
 dailysheduleContent : Model -> Html Msg
 dailysheduleContent model =
-    case model.combinedData of
+    case model.dailyScheduleData of
         Api.Loading ->
             div [] [ text "Loading..." ]
 
