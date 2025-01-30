@@ -10,5 +10,7 @@ footerView =
         [ p [ class "center-block" ]
             [ text "copyright 2025 - "
             , a [ href "https://gertjanassies.dev" ] [ text "gertjanassies.dev" ]
+            , text " | "
+            , a [ href "https://github.com/gertjana/medicate-ui" ] [ text "github" ]
             ]
         ]

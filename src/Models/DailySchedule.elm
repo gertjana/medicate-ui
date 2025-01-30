@@ -1,8 +1,10 @@
 module Models.DailySchedule exposing (..)
 
-import Html exposing (..)
+import Html exposing (Html, td, th, tr, ul, li, button, text, table, thead, tbody, div)
 import Html.Attributes exposing (class)
+import Html.Events exposing (onClick)
 import Json.Decode as Decode exposing (Decoder)
+import Json.Decode.Pipeline exposing (optional, required)
 import Models.Medicines exposing (Medicine, medicineDecoder)
 
 
@@ -29,14 +31,22 @@ medicineDosagesDecoder =
 type alias DailyScheduleEntry =
     { time : String
     , medicines : MedicineDosages
+    , taken : Bool
     }
 
+-- postDecoder : Decoder Post
+-- postDecoder =
+--     Decode.succeed Post
+--         |> required "id" int
+--         |> required "title" string
+--         |> required "author" string
 
 dailyScheduleEntryDecoder : Decoder DailyScheduleEntry
 dailyScheduleEntryDecoder =
-    Decode.map2 DailyScheduleEntry
-        (Decode.field "time" Decode.string)
-        (Decode.field "medicines" medicineDosagesDecoder)
+    Decode.succeed DailyScheduleEntry
+        |> required "time" Decode.string
+        |> required "medicines" medicineDosagesDecoder
+        |> optional "taken" Decode.bool False
 
 
 type alias DailySchedule =
@@ -48,11 +58,16 @@ dailyScheduleDecoder =
     Decode.list dailyScheduleEntryDecoder
 
 
-viewActionButtons : Html msg
-viewActionButtons =
-    div []
-        [ a [ class "btn btn-xs btn-primary" ] [ text "take" ]
-        ]
+viewActionButtons: (String -> msg) -> String -> Bool-> Html msg
+viewActionButtons onTakeDose time taken =
+    if not taken then
+        div []
+            [ button [ class "btn btn-xs btn-primary", onClick (onTakeDose time)] [ text "take dose" ]
+            ]
+    else
+        div []
+            [ button [ class "btn btn-xs btn-light" ] [ text "dose taken" ]
+            ]
 
 
 viewMedicineDosage : ( Medicine, Float ) -> Html msg
@@ -70,20 +85,20 @@ viewMedicineDosage ( medicine, amount ) =
 
 
 viewMedicineDosages : MedicineDosages -> Html msg
-viewMedicineDosages cms =
-    ul [] (List.map (\cm -> viewMedicineDosage cm) cms)
+viewMedicineDosages medicineDosages =
+    ul [] (List.map (\cm -> viewMedicineDosage cm) medicineDosages)
 
 
-viewDailyScheduleEntry : DailyScheduleEntry -> Html msg
-viewDailyScheduleEntry cs =
+viewDailyScheduleEntry : (String -> msg) -> DailyScheduleEntry -> Html msg
+viewDailyScheduleEntry onTakeDose dialyScheduleEntry =
     tr []
-        [ td [] [ text cs.time, viewActionButtons ]
-        , td [] [ viewMedicineDosages cs.medicines ]
+        [ td [] [ text dialyScheduleEntry.time, viewActionButtons onTakeDose dialyScheduleEntry.time dialyScheduleEntry.taken ]
+        , td [] [ viewMedicineDosages dialyScheduleEntry.medicines ]
         ]
 
 
-viewDailySchedule : DailySchedule -> Html msg
-viewDailySchedule css =
+viewDailySchedule : (String -> msg) -> DailySchedule -> Html msg
+viewDailySchedule onTakeDose dailySchedule =
     table [ class "dailyschedule table table-striped table-condensed table-hover table-bordered" ]
         [ thead [ class "thead-dark" ]
             [ tr []
@@ -91,5 +106,5 @@ viewDailySchedule css =
                 , th [ class "col-md-3 " ] [ text "Medicines" ]
                 ]
             ]
-        , tbody [] (List.map (\l -> viewDailyScheduleEntry l) css)
+        , tbody [] (List.map (\l -> viewDailyScheduleEntry onTakeDose l) dailySchedule)
         ]

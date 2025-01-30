@@ -1,12 +1,13 @@
 module Pages.Home_ exposing (Model, Msg, page)
 
 import Api exposing (Data(..))
-import Api.MedicateApi exposing (getMedicines, getSchedules, getDailySchedule)
+import Api.MedicateApi exposing (getDailySchedule, getDosageHistory, getMedicines, getSchedules, takeDose)
 import Html exposing (..)
 import Html.Attributes exposing (class)
 import Http
 import Models.DailySchedule exposing (DailySchedule)
-import Models.Medicines exposing (Medicines)
+import Models.Dosagehistory exposing (DosageHistories)
+import Models.Medicines exposing (Medicine, Medicines)
 import Models.Schedules exposing (Schedules)
 import Page exposing (Page)
 import Parts.Footer exposing (footerView)
@@ -28,6 +29,7 @@ type alias Model =
     { medicineData : Api.Data Medicines
     , scheduleData : Api.Data Schedules
     , dailyScheduleData : Api.Data DailySchedule
+    , dosageHistoryData : Api.Data DosageHistories
     }
 
 
@@ -36,11 +38,13 @@ init =
     ( { medicineData = Api.Loading
       , scheduleData = Api.Loading
       , dailyScheduleData = Api.Loading
+      , dosageHistoryData = Api.Loading
       }
     , Cmd.batch
-        [ Api.MedicateApi.getMedicines { onResponse = MedicineApiResponded }
-        , Api.MedicateApi.getSchedules { onResponse = ScheduleApiResponded }
-        , Api.MedicateApi.getDailySchedule { onResponse = DailyScheduleApiResponded }
+        [ getMedicines { onResponse = MedicineApiResponded }
+        , getSchedules { onResponse = ScheduleApiResponded }
+        , getDailySchedule { onResponse = DailyScheduleApiResponded }
+        , getDosageHistory { onResponse = DosageHistoryApiResponded }
         ]
     )
 
@@ -49,8 +53,9 @@ type Msg
     = MedicineApiResponded (Result Http.Error Medicines)
     | ScheduleApiResponded (Result Http.Error Schedules)
     | DailyScheduleApiResponded (Result Http.Error DailySchedule)
-    | AddMedicine
-    | TakeDose
+    | AddMedicine Medicine
+    | TakeDose String
+    | DosageHistoryApiResponded (Result Http.Error DosageHistories)
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -71,6 +76,11 @@ update msg model =
             , Cmd.none
             )
 
+        DosageHistoryApiResponded (Ok dosageHistory) ->
+            ( { model | dosageHistoryData = Api.Success dosageHistory }
+            , Cmd.none
+            )
+
         MedicineApiResponded (Err httpError) ->
             ( { model | medicineData = Api.Failure httpError }
             , Cmd.none
@@ -86,11 +96,18 @@ update msg model =
             , Cmd.none
             )
 
-        AddMedicine ->
-            ( model, Cmd.none )
+        DosageHistoryApiResponded (Err httpError) ->
+            ( { model | dosageHistoryData = Api.Failure httpError }
+            , Cmd.none
+            )
 
-        TakeDose ->
-            ( model, Cmd.none )
+        AddMedicine medicine ->
+            Debug.log ("AddMedicine" ++ Debug.toString medicine)
+                ( model, Cmd.none )
+
+        TakeDose time ->
+            Debug.log ("TakeDose" ++ time)
+                ( model, Cmd.batch [ takeDose { onResponse = DailyScheduleApiResponded, time = time } ] )
 
 
 subscriptions : Model -> Sub Msg
@@ -98,7 +115,9 @@ subscriptions _ =
     Sub.none
 
 
+
 -- Views
+
 
 medicineContent : Model -> Html Msg
 medicineContent model =
@@ -107,7 +126,7 @@ medicineContent model =
             div [] [ text "Loading..." ]
 
         Api.Success medicineList ->
-            Models.Medicines.viewMedicineList medicineList
+            Models.Medicines.viewMedicineList medicineList False
 
         Api.Failure _ ->
             div [] [ text "Something went wrong: " ]
@@ -133,7 +152,20 @@ dailysheduleContent model =
             div [] [ text "Loading..." ]
 
         Api.Success dailyScheduleList ->
-            Models.DailySchedule.viewDailySchedule dailyScheduleList 
+            Models.DailySchedule.viewDailySchedule TakeDose dailyScheduleList
+
+        Api.Failure httpError ->
+            div [] [ text ("Something went wrong: " ++ Debug.toString httpError) ]
+
+
+dosageHistoryContent : Model -> Html Msg
+dosageHistoryContent model =
+    case model.dosageHistoryData of
+        Api.Loading ->
+            div [] [ text "Loading..." ]
+
+        Api.Success dosageHistoryList ->
+            Models.Dosagehistory.viewDosageHistories dosageHistoryList
 
         Api.Failure httpError ->
             div [] [ text ("Something went wrong: " ++ Debug.toString httpError) ]
@@ -152,9 +184,14 @@ contentView model =
             [ h3 [] [ text "Daily Schedule" ]
             , dailysheduleContent model
             ]
-        , div [class "col-md-4 content" ]
-          [ h3 [] [ text "Schedules"]
-         , scheduleContent model ]
+        , div [ class "col-md-4 content" ]
+            [ h3 [] [ text "Dosage History" ]
+            , dosageHistoryContent model
+            ]
+        , div [ class "col-md-4 content" ]
+            [ h3 [] [ text "Schedules" ]
+            , scheduleContent model
+            ]
         , div [ class "col-md-12 footer" ]
             [ footerView ]
         ]

@@ -16,11 +16,9 @@ table.medicines td:last-child a {
 .footer {
   background-color: #7147cb;
   color: white;
-  text-align: center;
-  padding: 10px;
-  position: fixed;
-  bottom: 0;
-  width: 100%;
+  text-align: right;
+  padding-top: 5px;
+
 }
 .footer a {
   color: white;
@@ -34,4 +32,46 @@ ul {
 table thead.thead-dark {
   background-color: #7147cb;
   color: white;
+}
+
+nav {
+  margin-bottom: 0px !important;
+}
+nav a.navbar-brand {
+  font-size: 25px;
+  border: none;
+  padding: 5px !important;
+  
+}
+
+nav a {
+  color: white;
+  text-decoration: none;
+  padding: 10px;
+  border-left: 1px solid white;
+}
+
+nav a:hover {
+  text-decoration: underline;
+  color: white;
+}
+
+ul.todo {
+  padding-inline-start: 25px;
+  list-style-type: square;
+  font-size: 1.2em;
+}
+
+.todo li.done {
+  color: green;
+  text-decoration: line-through;
+}
+
+.todo li.doing {
+  color: orange;
+  font-weight: bold;
+}
+
+.todo li.wontdo {
+  color: red;
 }

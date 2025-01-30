@@ -1,7 +1,8 @@
-module Models.Medicines exposing (Medicine, Medicines, dummy, medicineDecoder, medicineListDecoder, toString, viewMedicineList)
+module Models.Medicines exposing (Medicine, Medicines, medicineDecoder, medicineListDecoder, toString, viewMedicineList)
 
-import Html exposing (..)
-import Html.Attributes exposing (..)
+import Html exposing (Html, text, tr, th, td, table, thead, tbody, div, input, button, a)
+import Html.Attributes exposing (class, type_, placeholder)
+import Html.Events exposing (onClick)
 import Json.Decode as Decode exposing (Decoder)
 
 
@@ -11,19 +12,17 @@ type alias Medicine =
     , dose : Float
     , unit : String
     , stock : Float
-    , amount : Float
     }
 
 
 medicineDecoder : Decoder Medicine
 medicineDecoder =
-    Decode.map6 Medicine
+    Decode.map5 Medicine
         (Decode.field "id" Decode.string)
         (Decode.field "name" Decode.string)
         (Decode.field "dose" Decode.float)
         (Decode.field "unit" Decode.string)
         (Decode.field "stock" Decode.float)
-        (Decode.field "amount" Decode.float)
 
 
 type alias Medicines =
@@ -40,17 +39,6 @@ toString medicine =
     medicine.name ++ " ()" ++ String.fromFloat medicine.dose ++ " " ++ medicine.unit ++ ")"
 
 
-dummy : Medicine
-dummy =
-    { id = "1"
-    , name = "Paracetamol"
-    , dose = 500.0
-    , unit = "mg"
-    , stock = 10.0
-    , amount = 10.0
-    }
-
-
 viewActionButtons : Html msg
 viewActionButtons =
     div []
@@ -59,19 +47,19 @@ viewActionButtons =
         ]
 
 
-viewMedicine : Medicine -> Html msg
-viewMedicine medicine =
+viewMedicine : Medicine -> Bool -> Html msg
+viewMedicine medicine editMode =
     tr []
         [ td [] [ text medicine.id ]
         , td [] [ text medicine.name ]
         , td [] [ text (String.fromFloat medicine.dose) ]
         , td [] [ text medicine.unit ]
         , td [] [ text (String.fromFloat medicine.stock) ]
-        , td [] [ text (String.fromFloat medicine.amount) ]
-        , td [] [ text (String.fromFloat medicine.amount) ]
-        , td [] [ viewActionButtons ]
+        , if editMode then 
+            td [] [ viewActionButtons ]
+        else
+            text ""
         ]
-
 
 viewMedicineFormRow : Html msg
 viewMedicineFormRow =
@@ -81,14 +69,12 @@ viewMedicineFormRow =
         , td [] [ input [ class "form-control", type_ "number", placeholder "Dose" ] [] ]
         , td [] [ input [ class "form-control", type_ "number", placeholder "Unit" ] [] ]
         , td [] [ input [ class "form-control", type_ "number", placeholder "Stock" ] [] ]
-        , td [] [ input [ class "form-control", type_ "number", placeholder "Amount" ] [] ]
-        , td [] [ text "" ] -- days left
         , td [] [ button [ class "btn btn-sm btn-default btn-primary" ] [ text "add" ] ]
         ]
 
 
-viewMedicineList : Medicines -> Html msg
-viewMedicineList medicines =
+viewMedicineList : Medicines -> Bool -> Html msg
+viewMedicineList medicines editMode =
     table [ class "medicines table table-striped table-condensed table-hover table-bordered" ]
         [ thead [ class "thead-dark" ]
             [ tr []
@@ -97,10 +83,14 @@ viewMedicineList medicines =
                 , th [ class "col-md-1" ] [ text "Dose" ]
                 , th [ class "col-md-1" ] [ text "Unit" ]
                 , th [ class "col-md-1" ] [ text "Stock" ]
-                , th [ class "col-md-1" ] [ text "Amount" ]
-                , th [ class "col-md-1" ] [ text "Days Left" ]
-                , th [ class "col-md-2" ] [ text "Actions" ]
+                , if editMode then 
+                    th [ class "col-md-2" ] [ text "Actions" ]
+                else
+                   text ""
                 ]
             ]
-        , tbody [] (List.append (List.map (\l -> viewMedicine l) medicines) [ viewMedicineFormRow ])
+        , tbody [] (if editMode then 
+            (List.append (List.map (\l -> viewMedicine l editMode) medicines) [ viewMedicineFormRow ]) 
+            else 
+            (List.map (\l -> viewMedicine l editMode) medicines) )
         ]
