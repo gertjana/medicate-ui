@@ -1,14 +1,12 @@
 module Pages.Home_ exposing (Model, Msg, page)
 
 import Api exposing (Data(..))
-import Api.MedicateApi exposing (getDailySchedule, getDosageHistory, getMedicines, getSchedules, takeDose)
+import Api.MedicateApi exposing (getDailySchedule, getMedicines, takeDose)
 import Html exposing (..)
-import Html.Attributes exposing (class)
+import Html.Attributes exposing (class, href)
 import Http
 import Models.DailySchedule exposing (DailySchedule)
-import Models.Dosagehistory exposing (DosageHistories)
 import Models.Medicines exposing (Medicine, Medicines)
-import Models.Schedules exposing (Schedules)
 import Page exposing (Page)
 import Parts.Footer exposing (footerView)
 import Parts.Header exposing (headerView)
@@ -27,35 +25,27 @@ page =
 
 type alias Model =
     { medicineData : Api.Data Medicines
-    , scheduleData : Api.Data Schedules
     , dailyScheduleData : Api.Data DailySchedule
-    , dosageHistoryData : Api.Data DosageHistories
     }
 
 
 init : ( Model, Cmd Msg )
 init =
     ( { medicineData = Api.Loading
-      , scheduleData = Api.Loading
       , dailyScheduleData = Api.Loading
-      , dosageHistoryData = Api.Loading
       }
     , Cmd.batch
         [ getMedicines { onResponse = MedicineApiResponded }
-        , getSchedules { onResponse = ScheduleApiResponded }
         , getDailySchedule { onResponse = DailyScheduleApiResponded }
-        , getDosageHistory { onResponse = DosageHistoryApiResponded }
         ]
     )
 
 
 type Msg
     = MedicineApiResponded (Result Http.Error Medicines)
-    | ScheduleApiResponded (Result Http.Error Schedules)
     | DailyScheduleApiResponded (Result Http.Error DailySchedule)
     | AddMedicine Medicine
     | TakeDose String
-    | DosageHistoryApiResponded (Result Http.Error DosageHistories)
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -66,18 +56,8 @@ update msg model =
             , Cmd.none
             )
 
-        ScheduleApiResponded (Ok schedules) ->
-            ( { model | scheduleData = Api.Success schedules }
-            , Cmd.none
-            )
-
         DailyScheduleApiResponded (Ok dailySchedule) ->
             ( { model | dailyScheduleData = Api.Success dailySchedule }
-            , Cmd.none
-            )
-
-        DosageHistoryApiResponded (Ok dosageHistory) ->
-            ( { model | dosageHistoryData = Api.Success dosageHistory }
             , Cmd.none
             )
 
@@ -86,18 +66,8 @@ update msg model =
             , Cmd.none
             )
 
-        ScheduleApiResponded (Err httpError) ->
-            ( { model | scheduleData = Api.Failure httpError }
-            , Cmd.none
-            )
-
         DailyScheduleApiResponded (Err httpError) ->
             ( { model | dailyScheduleData = Api.Failure httpError }
-            , Cmd.none
-            )
-
-        DosageHistoryApiResponded (Err httpError) ->
-            ( { model | dosageHistoryData = Api.Failure httpError }
             , Cmd.none
             )
 
@@ -132,19 +102,6 @@ medicineContent model =
             div [] [ text "Something went wrong: " ]
 
 
-scheduleContent : Model -> Html Msg
-scheduleContent model =
-    case model.scheduleData of
-        Api.Loading ->
-            div [] [ text "Loading..." ]
-
-        Api.Success scheduleList ->
-            Models.Schedules.viewSchedules scheduleList
-
-        Api.Failure httpError ->
-            div [] [ text ("Something went wrong: " ++ Debug.toString httpError) ]
-
-
 dailysheduleContent : Model -> Html Msg
 dailysheduleContent model =
     case model.dailyScheduleData of
@@ -157,18 +114,19 @@ dailysheduleContent model =
         Api.Failure httpError ->
             div [] [ text ("Something went wrong: " ++ Debug.toString httpError) ]
 
+welcomeContent : Html Msg
+welcomeContent =
+    div [ class "welcome" ] 
+    [ h3 [] [ text "Welcome to Medicate" ] 
+    , article [] 
+        [ p [] [ text "Medicate is an application to maintain your stock of medicines, take doses, add stock and get an idea when you're about to run out. " ]
+        , p [] [ text "This application is built with Elm in the front and Scala ZIO in the back." ]
+        , p [] [ text "The source code is available on Github: " ]
+        , p [] [a [ href "https://github.com/gertjena/medicate" ] [ text "https://github.com/gertjana/medicate" ]]
+        , p [] [ text "This application is a work in progress and grown out of my own need to keep track of my medicines and learn Elm." ]
+        ]
+    ]
 
-dosageHistoryContent : Model -> Html Msg
-dosageHistoryContent model =
-    case model.dosageHistoryData of
-        Api.Loading ->
-            div [] [ text "Loading..." ]
-
-        Api.Success dosageHistoryList ->
-            Models.Dosagehistory.viewDosageHistories dosageHistoryList
-
-        Api.Failure httpError ->
-            div [] [ text ("Something went wrong: " ++ Debug.toString httpError) ]
 
 
 contentView : Model -> Html Msg
@@ -176,21 +134,15 @@ contentView model =
     div [ class "container-fluid" ]
         [ div [ class "col-md-12" ]
             [ headerView ]
-        , div [ class "col-md-8 content" ]
-            [ h3 [] [ text "Medicines" ]
-            , medicineContent model
-            ]
+        , div [ class "col-md-4" ]
+            [ welcomeContent ]
         , div [ class "col-md-4 content" ]
             [ h3 [] [ text "Daily Schedule" ]
             , dailysheduleContent model
             ]
-        , div [ class "col-md-4 content" ]
-            [ h3 [] [ text "Dosage History" ]
-            , dosageHistoryContent model
-            ]
-        , div [ class "col-md-4 content" ]
-            [ h3 [] [ text "Schedules" ]
-            , scheduleContent model
+        , div [ class "col-md-8 content" ]
+            [ h3 [] [ text "Medicines" ]
+            , medicineContent model
             ]
         , div [ class "col-md-12 footer" ]
             [ footerView ]

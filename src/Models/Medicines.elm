@@ -2,7 +2,6 @@ module Models.Medicines exposing (Medicine, Medicines, medicineDecoder, medicine
 
 import Html exposing (Html, text, tr, th, td, table, thead, tbody, div, input, button, a)
 import Html.Attributes exposing (class, type_, placeholder)
-import Html.Events exposing (onClick)
 import Json.Decode as Decode exposing (Decoder)
 
 
@@ -67,7 +66,7 @@ viewMedicineFormRow =
         [ td [] [ text "" ]
         , td [] [ input [ class "form-control", type_ "text", placeholder "Name" ] [] ]
         , td [] [ input [ class "form-control", type_ "number", placeholder "Dose" ] [] ]
-        , td [] [ input [ class "form-control", type_ "number", placeholder "Unit" ] [] ]
+        , td [] [ input [ class "form-control", type_ "text", placeholder "Unit" ] [] ]
         , td [] [ input [ class "form-control", type_ "number", placeholder "Stock" ] [] ]
         , td [] [ button [ class "btn btn-sm btn-default btn-primary" ] [ text "add" ] ]
         ]

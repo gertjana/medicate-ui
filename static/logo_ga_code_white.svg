@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 500 300">
+   <circle cx="150" cy="150" r="148" stroke="white" stroke-width="4" fill="none" />
+   <line x1="75" y1="150" x2="140" y2="150" style="stroke:rgb(255,255,255);stroke-width:2" />
+   <line x1="140" y1="150" x2="140" y2="280" style="stroke:rgb(255,255,255);stroke-width:2" />
+   <line x1="160" y1="280" x2="160" y2="20" style="stroke:rgb(255,255,255);stroke-width:2" />
+   <line x1="160" y1="150" x2="280" y2="150" style="stroke:rgb(255,255,255);stroke-width:2" />
+   <text x="300" y="299" fill="white" style="font-family:Verdana;font-size:72;">Code</text>
+</svg> 

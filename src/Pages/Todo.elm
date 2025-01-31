@@ -23,9 +23,16 @@ todo =
     , ( "done", "BE/FE: Implement History of taken doses" )
     , ( "done", "BE/FE: Remove amount and daysLeft from medicine" )
     , ( "wontdo", "FE: See what layouts are and how to implement them" )
-    , ( "doing", "FE: Create pages for editing medicine, editing schedules and dosage histories" )
+    , ( "done", "BE: BUG Dosagehistory is added correctly" )
+    , ( "done", "FE: Create pages for editing medicine, editing schedules and dosage histories" )
+    , ( "doing", "BE: have to dose taken reduce the medicine stock" )
+    , ( "", "BE: make the dosage history page a timeline" )
     , ( "", "BE: Calculate days left from daily schedule" )
     , ( "", "BE: Inject medicine where it says medicineId" )
+    , ( "", "BE/FE: CRUD for medicines" )
+    , ( "", "BE/FE: CRUD for schedules" )
+    , ( "", "BE/FE: Add Stock button" )
+    , ( "", "FE: Add a page for the about page" )
     ]
 
 
