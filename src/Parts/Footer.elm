@@ -1,13 +1,15 @@
 module Parts.Footer exposing (footerView)
 
-import Html exposing (Html, a, div, p, text)
-import Html.Attributes exposing (class, href)
+import Html exposing (Html, a, div, p, text, img)
+import Html.Attributes exposing (class, href, src)
 
 
 footerView : Html msg
 footerView =
     div [ class "footer" ]
-        [ p [ class "center-block" ]
+        [ div [ class "col-md-1 logo" ]
+            [ img [ src "/static/logo_ga_code_white.svg", class "logo" ] [] ]
+        , p [ class "center-block" ]
             [ text "copyright 2025 - "
             , a [ href "https://gertjanassies.dev" ] [ text "gertjanassies.dev" ]
             , text " | "

@@ -5,7 +5,7 @@ import Api.MedicateApi exposing (getMedicines)
 import Html exposing (Html, div, h3, text)
 import Html.Attributes exposing (class)
 import Http
-import Models.Medicines exposing (Medicines)
+import Models.Medicines exposing (Medicines, Medicine)
 import Page exposing (Page)
 import Parts.Footer exposing (footerView)
 import Parts.Header exposing (headerView)
@@ -29,6 +29,10 @@ page =
 
 type Msg
     = MedicineApiResponded (Result Http.Error Medicines)
+    | EditMedicine Medicine 
+    | DeleteMedicine Medicine
+    | AddMedicine
+    | AddStock Medicine
 
 
 init : ( Model, Cmd Msg )
@@ -41,7 +45,6 @@ init =
 subscriptions : Model -> Sub Msg
 subscriptions _ =
     Sub.none
-
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
@@ -56,15 +59,31 @@ update msg model =
             , Cmd.none
             )
 
+        EditMedicine medicine ->
+            Debug.log ("EditMedicine: " ++ Debug.toString medicine)
+            ( model, Cmd.none )
 
-medicineContent : Model -> Bool -> Html Msg
-medicineContent model editMode =
+        DeleteMedicine medicine ->
+            Debug.log ("DeleteMedicine: " ++ Debug.toString medicine)
+            ( model, Cmd.none ) 
+
+        AddMedicine ->
+            Debug.log ("AddMedicine: ")
+            ( model, Cmd.none )
+
+        AddStock medicine ->
+            Debug.log ("AddStock: " ++ Debug.toString medicine)
+            ( model, Cmd.none )
+
+
+medicineContent : Model -> Html Msg
+medicineContent model =
     case model.medicineData of
         Api.Loading ->
             div [] [ text "Loading..." ]
 
         Api.Success medicineList ->
-            Models.Medicines.viewMedicineList medicineList editMode
+            Models.Medicines.viewMedicineList medicineList EditMedicine DeleteMedicine AddMedicine AddStock
 
         Api.Failure _ ->
             div [] [ text "Something went wrong: " ]
@@ -77,7 +96,7 @@ contentView model =
             [ headerView ]
         , div [ class "col-md-8 content" ]
             [ h3 [] [ text "Medicines" ]
-            , medicineContent model True
+            , medicineContent model
             ]
         , div [ class "col-md-12 footer" ]
             [ footerView ]
@@ -86,6 +105,6 @@ contentView model =
 
 view : Model -> View Msg
 view model =
-    { title = "Pages.Medicate"
+    { title = "Medicines"
     , body = [ contentView model ]
     }

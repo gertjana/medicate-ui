@@ -6,11 +6,12 @@ import Html exposing (..)
 import Html.Attributes exposing (class, href)
 import Http
 import Models.DailySchedule exposing (DailySchedule)
-import Models.Medicines exposing (Medicine, Medicines)
+import Models.Medicines exposing (Medicines)
 import Page exposing (Page)
 import Parts.Footer exposing (footerView)
 import Parts.Header exposing (headerView)
 import View exposing (View)
+-- import Shared.Msg exposing (Msg(..))
 
 
 page : Page Model Msg
@@ -44,7 +45,6 @@ init =
 type Msg
     = MedicineApiResponded (Result Http.Error Medicines)
     | DailyScheduleApiResponded (Result Http.Error DailySchedule)
-    | AddMedicine Medicine
     | TakeDose String
 
 
@@ -71,19 +71,13 @@ update msg model =
             , Cmd.none
             )
 
-        AddMedicine medicine ->
-            Debug.log ("AddMedicine" ++ Debug.toString medicine)
-                ( model, Cmd.none )
-
         TakeDose time ->
             Debug.log ("TakeDose" ++ time)
                 ( model, Cmd.batch [ takeDose { onResponse = DailyScheduleApiResponded, time = time } ] )
 
-
 subscriptions : Model -> Sub Msg
 subscriptions _ =
     Sub.none
-
 
 
 -- Views
@@ -96,7 +90,7 @@ medicineContent model =
             div [] [ text "Loading..." ]
 
         Api.Success medicineList ->
-            Models.Medicines.viewMedicineList medicineList False
+            Models.Medicines.viewMedicineListRead medicineList 
 
         Api.Failure _ ->
             div [] [ text "Something went wrong: " ]
@@ -117,9 +111,9 @@ dailysheduleContent model =
 welcomeContent : Html Msg
 welcomeContent =
     div [ class "welcome" ] 
-    [ h3 [] [ text "Welcome to Medicate" ] 
+    [ h3 [] [ text "Welcome to Medikeit" ] 
     , article [] 
-        [ p [] [ text "Medicate is an application to maintain your stock of medicines, take doses, add stock and get an idea when you're about to run out. " ]
+        [ p [] [ text "Medikeit is an application to maintain your stock of medicines, take doses, add stock and get an idea when you're about to run out. " ]
         , p [] [ text "This application is built with Elm in the front and Scala ZIO in the back." ]
         , p [] [ text "The source code is available on Github: " ]
         , p [] [a [ href "https://github.com/gertjena/medicate" ] [ text "https://github.com/gertjana/medicate" ]]
@@ -151,6 +145,6 @@ contentView model =
 
 view : Model -> View Msg
 view model =
-    { title = "Medicate"
+    { title = "Medikeit"
     , body = [ contentView model ]
     }

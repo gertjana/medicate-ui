@@ -34,13 +34,6 @@ type alias DailyScheduleEntry =
     , taken : Bool
     }
 
--- postDecoder : Decoder Post
--- postDecoder =
---     Decode.succeed Post
---         |> required "id" int
---         |> required "title" string
---         |> required "author" string
-
 dailyScheduleEntryDecoder : Decoder DailyScheduleEntry
 dailyScheduleEntryDecoder =
     Decode.succeed DailyScheduleEntry
@@ -80,7 +73,9 @@ viewMedicineDosage ( medicine, amount ) =
         , text (String.fromFloat medicine.dose)
         , text " "
         , text medicine.unit
-        , text ")"
+        , text ") "
+        , text (String.fromFloat medicine.stock)
+        , text " in stock"
         ]
 
 
@@ -99,12 +94,15 @@ viewDailyScheduleEntry onTakeDose dialyScheduleEntry =
 
 viewDailySchedule : (String -> msg) -> DailySchedule -> Html msg
 viewDailySchedule onTakeDose dailySchedule =
-    table [ class "dailyschedule table table-striped table-condensed table-hover table-bordered" ]
-        [ thead [ class "thead-dark" ]
-            [ tr []
-                [ th [ class "col-md-1" ] [ text "Time" ]
-                , th [ class "col-md-3 " ] [ text "Medicines" ]
+    if List.isEmpty dailySchedule then
+        div [ class "alert alert-info col-md-3" ] [ text "No daily schedule found" ]
+    else
+        table [ class "dailyschedule table table-striped table-condensed table-hover table-bordered" ]
+            [ thead [ class "thead-dark" ]
+                [ tr []
+                    [ th [ class "col-md-1" ] [ text "Time" ]
+                    , th [ class "col-md-3 " ] [ text "Medicines" ]
+                    ]
                 ]
+            , tbody [] (List.map (\l -> viewDailyScheduleEntry onTakeDose l) dailySchedule)
             ]
-        , tbody [] (List.map (\l -> viewDailyScheduleEntry onTakeDose l) dailySchedule)
-        ]
