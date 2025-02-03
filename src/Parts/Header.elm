@@ -1,7 +1,7 @@
 module Parts.Header exposing (headerView)
 
-import Html exposing (Html, div, p, text, nav, a, img)
-import Html.Attributes exposing (class, href, src)
+import Html exposing (Html, div, text, nav, a)
+import Html.Attributes exposing (class, href)
 
 
 headerView : Html msg

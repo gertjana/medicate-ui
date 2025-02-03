@@ -1,6 +1,6 @@
 module Models.Schedules exposing (Schedules, scheduleListDecoder, viewSchedules)
 
-import Html exposing (Html, text, tr, td, table, tbody, thead, div)
+import Html exposing (Html, text, tr, td, table, tbody, thead, div, th)
 import Html.Attributes exposing (class)
 import Json.Decode as Decode exposing (Decoder)
 import Json.Decode.Pipeline exposing (required)
