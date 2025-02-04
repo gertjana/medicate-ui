@@ -10,6 +10,7 @@ type alias Schedule =
     { id : String
     , time : String
     , medicineId : String
+    , description: String
     , amount : Float
     }
 
@@ -20,6 +21,7 @@ scheduleDecoder =
         |> required "id" Decode.string
         |> required "time" Decode.string
         |> required "medicineId" Decode.string
+        |> required "description" Decode.string
         |> required "amount" Decode.float
 
 
@@ -35,9 +37,8 @@ scheduleListDecoder =
 viewSchedule : Schedule -> Html msg
 viewSchedule schedule =
     tr []
-        [ td [] [ text schedule.id ]
-        , td [] [ text schedule.time ]
-        , td [] [ text schedule.medicineId ]
+        [ td [] [ text schedule.time ]
+        , td [] [ text schedule.description ]
         , td [] [ text (String.fromFloat schedule.amount) ]
         ]
 
@@ -50,9 +51,8 @@ viewSchedules schedules =
         table [ class "table table-striped table-condensed table-hover table-bordered" ]
             [ thead [class "thead-dark"]
                 [ tr []
-                    [ th [ class "col-md-1" ] [ text "Id" ]
-                    , th [ class "col-md-1" ] [ text "Time" ]
-                    , th [ class "col-md-1" ] [ text "Medicines" ]
+                    [ th [ class "col-md-1" ] [ text "Time" ]
+                    , th [ class "col-md-3" ] [ text "Medicines" ]
                     , th [ class "col-md-1" ] [ text "Amount" ]
                     ]
                 ]

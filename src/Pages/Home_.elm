@@ -93,7 +93,7 @@ medicineContent model =
             Models.Medicines.viewMedicineListRead medicineList 
 
         Api.Failure _ ->
-            div [] [ text "Something went wrong: " ]
+            div [ class "alert alert-danger"] [ text "Something went wrong: " ]
 
 
 dailysheduleContent : Model -> Html Msg
@@ -106,18 +106,18 @@ dailysheduleContent model =
             Models.DailySchedule.viewDailySchedule TakeDose dailyScheduleList
 
         Api.Failure httpError ->
-            div [] [ text ("Something went wrong: " ++ Debug.toString httpError) ]
+            div [class "alert alert-danger"] [ text ("Something went wrong: " ++ Debug.toString httpError) ]
 
 welcomeContent : Html Msg
 welcomeContent =
     div [ class "welcome" ] 
-    [ h3 [] [ text "Welcome to Medikeit" ] 
+    [ h3 [] [ text "Welcome" ] 
     , article [] 
-        [ p [] [ text "Medikeit is an application to maintain your stock of medicines, take doses, add stock and get an idea when you're about to run out. " ]
-        , p [] [ text "This application is built with Elm in the front and Scala ZIO in the back." ]
+        [ p [] [ text "Medikeit (phonetic spelling of Medicate) is an application to maintain your stock of medicines, take doses, add stock and get an idea when you're about to run out. " ]
+        , p [] [ text "This application is built with Elm in the front and Scala ZIO (zio-http, zio-redis) in the back." ]
         , p [] [ text "The source code is available on Github: " ]
         , p [] [a [ href "https://github.com/gertjena/medicate" ] [ text "https://github.com/gertjana/medicate" ]]
-        , p [] [ text "This application is a work in progress and grown out of my own need to keep track of my medicines and learn Elm." ]
+        , p [] [ text "This application is a work in progress and grown out of my own need to keep track of my medicines and learn Elm, Scala 3 and ZIO" ]
         ]
     ]
 

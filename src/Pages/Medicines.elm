@@ -86,7 +86,7 @@ medicineContent model =
             Models.Medicines.viewMedicineList medicineList EditMedicine DeleteMedicine AddMedicine AddStock
 
         Api.Failure _ ->
-            div [] [ text "Something went wrong: " ]
+            div [class "alert alert-danger"] [ text "Something went wrong: " ]
 
 
 contentView : Model -> Html Msg

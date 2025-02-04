@@ -9,6 +9,7 @@ type alias DosageHistory =
     { date : String
     , time : String
     , medicine : String
+    , description: String
     , amount : Float
     }
 
@@ -18,6 +19,7 @@ dosageHistoryDecoder =
         |> required "date" Decode.string
         |> required "time" Decode.string
         |> required "medicineId" Decode.string
+        |> required "description" Decode.string
         |> required "amount" Decode.float
 type alias DosageHistories =
     List DosageHistory
@@ -31,7 +33,7 @@ viewDosageHistory dosageHistory =
     tr []
         [ td [] [ text dosageHistory.date ]
         , td [] [ text dosageHistory.time ]
-        , td [] [ text dosageHistory.medicine ]
+        , td [] [ text dosageHistory.description ]
         , td [] [ text (String.fromFloat dosageHistory.amount) ]
         ]
 

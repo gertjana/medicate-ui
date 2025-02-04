@@ -6,11 +6,14 @@ import Models.Dosagehistory exposing (DosageHistories, dosageHistoriesDecoder)
 import Models.Medicines exposing (Medicines, medicineListDecoder)
 import Models.Schedules exposing (Schedules, scheduleListDecoder)
 
+backendUrl : String
+backendUrl =
+    "http://localhost:8080"
 
 getMedicines : { onResponse : Result Http.Error Medicines -> msg } -> Cmd msg
 getMedicines options =
     Http.get
-        { url = "http://localhost:8080/medicines"
+        { url = backendUrl ++ "/medicines"
         , expect = Http.expectJson options.onResponse medicineListDecoder
         }
 
@@ -18,7 +21,7 @@ getMedicines options =
 getSchedules : { onResponse : Result Http.Error Schedules -> msg } -> Cmd msg
 getSchedules options =
     Http.get
-        { url = "http://localhost:8080/schedules"
+        { url = backendUrl ++ "/schedules"
         , expect = Http.expectJson options.onResponse scheduleListDecoder
         }
 
@@ -26,7 +29,7 @@ getSchedules options =
 getDailySchedule : { onResponse : Result Http.Error DailySchedule -> msg } -> Cmd msg
 getDailySchedule options =
     Http.get
-        { url = "http://localhost:8080/schedules/daily"
+        { url = backendUrl ++ "/schedules/daily"
         , expect = Http.expectJson options.onResponse dailyScheduleDecoder
         }
 
@@ -34,15 +37,14 @@ getDailySchedule options =
 getDosageHistory : { onResponse : Result Http.Error DosageHistories -> msg } -> Cmd msg
 getDosageHistory options =
     Http.get
-        { url = "http://localhost:8080/dosagehistory"
+        { url = backendUrl ++ "/dosagehistory"
         , expect = Http.expectJson options.onResponse dosageHistoriesDecoder
         }
 
 
 takeDose : { onResponse : Result Http.Error DailySchedule -> msg, time : String } -> Cmd msg
 takeDose options =
-    Debug.log ("takeDose" ++ options.time)
-        Http.post
+    Http.post
         { url = "http://localhost:8080/schedules/takedose?time=" ++ options.time
         , body = Http.emptyBody
         , expect = Http.expectJson options.onResponse dailyScheduleDecoder

@@ -95,7 +95,7 @@ viewDailyScheduleEntry onTakeDose dialyScheduleEntry =
 viewDailySchedule : (String -> msg) -> DailySchedule -> Html msg
 viewDailySchedule onTakeDose dailySchedule =
     if List.isEmpty dailySchedule then
-        div [ class "alert alert-info col-md-3" ] [ text "No daily schedule found" ]
+        div [ class "alert alert-info col-md-4" ] [ text "No daily schedule found" ]
     else
         table [ class "dailyschedule table table-striped table-condensed table-hover table-bordered" ]
             [ thead [ class "thead-dark" ]
