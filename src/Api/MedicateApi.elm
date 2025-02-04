@@ -6,9 +6,11 @@ import Models.Dosagehistory exposing (DosageHistories, dosageHistoriesDecoder)
 import Models.Medicines exposing (Medicines, medicineListDecoder)
 import Models.Schedules exposing (Schedules, scheduleListDecoder)
 
+
 backendUrl : String
 backendUrl =
     "http://localhost:8080"
+
 
 getMedicines : { onResponse : Result Http.Error Medicines -> msg } -> Cmd msg
 getMedicines options =

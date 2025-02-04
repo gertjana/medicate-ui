@@ -1,6 +1,6 @@
 module Models.DailySchedule exposing (..)
 
-import Html exposing (Html, td, th, tr, ul, li, button, text, table, thead, tbody, div)
+import Html exposing (Html, button, div, li, table, tbody, td, text, th, thead, tr, ul)
 import Html.Attributes exposing (class)
 import Html.Events exposing (onClick)
 import Json.Decode as Decode exposing (Decoder)
@@ -34,6 +34,7 @@ type alias DailyScheduleEntry =
     , taken : Bool
     }
 
+
 dailyScheduleEntryDecoder : Decoder DailyScheduleEntry
 dailyScheduleEntryDecoder =
     Decode.succeed DailyScheduleEntry
@@ -51,12 +52,13 @@ dailyScheduleDecoder =
     Decode.list dailyScheduleEntryDecoder
 
 
-viewActionButtons: (String -> msg) -> String -> Bool-> Html msg
+viewActionButtons : (String -> msg) -> String -> Bool -> Html msg
 viewActionButtons onTakeDose time taken =
     if not taken then
         div []
-            [ button [ class "btn btn-xs btn-primary", onClick (onTakeDose time)] [ text "take dose" ]
+            [ button [ class "btn btn-xs btn-primary", onClick (onTakeDose time) ] [ text "take dose" ]
             ]
+
     else
         div []
             [ button [ class "btn btn-xs btn-light" ] [ text "dose taken" ]
@@ -96,6 +98,7 @@ viewDailySchedule : (String -> msg) -> DailySchedule -> Html msg
 viewDailySchedule onTakeDose dailySchedule =
     if List.isEmpty dailySchedule then
         div [ class "alert alert-info col-md-4" ] [ text "No daily schedule found" ]
+
     else
         table [ class "dailyschedule table table-striped table-condensed table-hover table-bordered" ]
             [ thead [ class "thead-dark" ]

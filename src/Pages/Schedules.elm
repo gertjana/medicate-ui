@@ -1,15 +1,16 @@
 module Pages.Schedules exposing (Model, Msg, page)
 
-import Html exposing (Html, div, text, h3)
-import Html.Attributes exposing (class)
-import View exposing (View)
-import Page exposing (Page)
 import Api exposing (Data(..))
 import Api.MedicateApi exposing (getSchedules)
-import Models.Schedules exposing (Schedules, viewSchedules)
+import Html exposing (Html, div, h3, text)
+import Html.Attributes exposing (class)
 import Http
-import Parts.Header exposing (headerView)
+import Models.Schedules exposing (Schedules, viewSchedules)
+import Page exposing (Page)
 import Parts.Footer exposing (footerView)
+import Parts.Header exposing (headerView)
+import View exposing (View)
+
 
 page : Page Model Msg
 page =
@@ -35,6 +36,7 @@ init =
 type Msg
     = ScheduleApiResponded (Result Http.Error Schedules)
 
+
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
@@ -48,9 +50,11 @@ update msg model =
             , Cmd.none
             )
 
+
 subscriptions : Model -> Sub Msg
 subscriptions _ =
     Sub.none
+
 
 scheduleContent : Model -> Html Msg
 scheduleContent model =
@@ -62,7 +66,8 @@ scheduleContent model =
             viewSchedules scheduleList
 
         Api.Failure httpError ->
-            div [class "alert alert-danger"] [ text ("Something went wrong: " ++ Debug.toString httpError) ]
+            div [ class "alert alert-danger" ] [ text ("Something went wrong: " ++ Debug.toString httpError) ]
+
 
 contentView : Model -> Html Msg
 contentView model =

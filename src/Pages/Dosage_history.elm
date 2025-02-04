@@ -1,15 +1,16 @@
 module Pages.Dosage_history exposing (Model, Msg, page)
 
+import Api exposing (Data(..))
+import Api.MedicateApi exposing (getDosageHistory)
 import Html exposing (Html, div, h3, text)
 import Html.Attributes exposing (class)
-import View exposing (View)
-import Page exposing (Page)
-import Api exposing (Data(..))
 import Http
 import Models.Dosagehistory exposing (DosageHistories, viewDosageHistories)
-import Parts.Header exposing (headerView)
+import Page exposing (Page)
 import Parts.Footer exposing (footerView)
-import Api.MedicateApi exposing (getDosageHistory)
+import Parts.Header exposing (headerView)
+import View exposing (View)
+
 
 page : Page Model Msg
 page =
@@ -80,6 +81,7 @@ contentView model =
         , div [ class "col-md-12 footer" ]
             [ footerView ]
         ]
+
 
 view : Model -> View Msg
 view model =

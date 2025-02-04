@@ -5,7 +5,7 @@ import Api.MedicateApi exposing (getMedicines)
 import Html exposing (Html, div, h3, text)
 import Html.Attributes exposing (class)
 import Http
-import Models.Medicines exposing (Medicines, Medicine)
+import Models.Medicines exposing (Medicine, Medicines)
 import Page exposing (Page)
 import Parts.Footer exposing (footerView)
 import Parts.Header exposing (headerView)
@@ -29,7 +29,7 @@ page =
 
 type Msg
     = MedicineApiResponded (Result Http.Error Medicines)
-    | EditMedicine Medicine 
+    | EditMedicine Medicine
     | DeleteMedicine Medicine
     | AddMedicine
     | AddStock Medicine
@@ -46,6 +46,7 @@ subscriptions : Model -> Sub Msg
 subscriptions _ =
     Sub.none
 
+
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
@@ -61,19 +62,19 @@ update msg model =
 
         EditMedicine medicine ->
             Debug.log ("EditMedicine: " ++ Debug.toString medicine)
-            ( model, Cmd.none )
+                ( model, Cmd.none )
 
         DeleteMedicine medicine ->
             Debug.log ("DeleteMedicine: " ++ Debug.toString medicine)
-            ( model, Cmd.none ) 
+                ( model, Cmd.none )
 
         AddMedicine ->
-            Debug.log ("AddMedicine: ")
-            ( model, Cmd.none )
+            Debug.log "AddMedicine: "
+                ( model, Cmd.none )
 
         AddStock medicine ->
             Debug.log ("AddStock: " ++ Debug.toString medicine)
-            ( model, Cmd.none )
+                ( model, Cmd.none )
 
 
 medicineContent : Model -> Html Msg
@@ -86,7 +87,7 @@ medicineContent model =
             Models.Medicines.viewMedicineList medicineList EditMedicine DeleteMedicine AddMedicine AddStock
 
         Api.Failure _ ->
-            div [class "alert alert-danger"] [ text "Something went wrong: " ]
+            div [ class "alert alert-danger" ] [ text "Something went wrong: " ]
 
 
 contentView : Model -> Html Msg

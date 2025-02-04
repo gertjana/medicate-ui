@@ -1,6 +1,6 @@
 module Pages.About exposing (page)
 
-import Html exposing (Html, h1, text, div)
+import Html exposing (Html, div, h1, text)
 import View exposing (View)
 
 
@@ -9,6 +9,7 @@ page =
     { title = "Pages.About"
     , body = [ contentView ]
     }
+
 
 contentView : Html msg
 contentView =

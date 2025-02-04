@@ -1,6 +1,6 @@
 module Parts.Footer exposing (footerView)
 
-import Html exposing (Html, a, div, p, text, img)
+import Html exposing (Html, a, div, img, p, text)
 import Html.Attributes exposing (class, href, src)
 
 

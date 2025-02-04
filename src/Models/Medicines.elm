@@ -1,11 +1,12 @@
 module Models.Medicines exposing (Medicine, Medicines, medicineDecoder, medicineListDecoder, toString, viewMedicineList, viewMedicineListRead)
 
-import Html exposing (Html, text, tr, th, td, table, thead, tbody, div, input, a)
-import Html.Attributes exposing (class, type_, placeholder, title)
+import FeatherIcons
+import Html exposing (Html, a, div, input, table, tbody, td, text, th, thead, tr)
+import Html.Attributes exposing (class, placeholder, title, type_)
 import Html.Events exposing (onClick)
 import Json.Decode as Decode exposing (Decoder)
 import Json.Decode.Pipeline exposing (required)
-import FeatherIcons
+
 
 type alias Medicine =
     { id : String
@@ -14,6 +15,7 @@ type alias Medicine =
     , unit : String
     , stock : Float
     }
+
 
 medicineDecoder : Decoder Medicine
 medicineDecoder =
@@ -45,11 +47,13 @@ editIcon msg =
         |> FeatherIcons.withSize 16
         |> FeatherIcons.toHtml [ onClick msg ]
 
+
 deleteIcon : msg -> Html msg
 deleteIcon msg =
     FeatherIcons.trash
         |> FeatherIcons.withSize 16
         |> FeatherIcons.toHtml [ onClick msg ]
+
 
 addStockIcon : msg -> Html msg
 addStockIcon msg =
@@ -74,8 +78,9 @@ viewMedicine medicine onEdit onDelete onAddStock =
         , td [] [ text (String.fromFloat medicine.dose) ]
         , td [] [ text medicine.unit ]
         , td [] [ text (String.fromFloat medicine.stock) ]
-        ,td [] [ viewActionButtons medicine onEdit onDelete onAddStock]
+        , td [] [ viewActionButtons medicine onEdit onDelete onAddStock ]
         ]
+
 
 viewMedicineRead : Medicine -> Html msg
 viewMedicineRead medicine =
@@ -86,49 +91,53 @@ viewMedicineRead medicine =
         , td [] [ text (String.fromFloat medicine.stock) ]
         ]
 
+
 viewMedicineFormRow : msg -> Html msg
 viewMedicineFormRow onAdd =
     tr []
-        [ td [] [ input [ class "form-control", type_ "text",   placeholder "Name"  ] [] ]
-        , td [] [ input [ class "form-control", type_ "number", placeholder "Dose"  ] [] ]
-        , td [] [ input [ class "form-control", type_ "text",   placeholder "Unit"  ] [] ]
+        [ td [] [ input [ class "form-control", type_ "text", placeholder "Name" ] [] ]
+        , td [] [ input [ class "form-control", type_ "number", placeholder "Dose" ] [] ]
+        , td [] [ input [ class "form-control", type_ "text", placeholder "Unit" ] [] ]
         , td [] [ input [ class "form-control", type_ "number", placeholder "Stock" ] [] ]
-        , td [] [  a [ class "btn btn-primary", title "Add", onClick onAdd ] [ text "Add" ] ]
+        , td [] [ a [ class "btn btn-primary", title "Add", onClick onAdd ] [ text "Add" ] ]
         ]
+
 
 viewMedicineListRead : Medicines -> Html msg
 viewMedicineListRead medicines =
     if List.isEmpty medicines then
         div [ class "alert alert-info col-md-3" ] [ text "No medicines found" ]
+
     else
         table [ class "medicines table table-striped table-condensed table-hover table-bordered" ]
-        [ thead [ class "thead-dark" ]
-            [ tr []
-                [ th [ class "col-md-4" ] [ text "Name" ]
-                , th [ class "col-md-1" ] [ text "Dose" ]
-                , th [ class "col-md-1" ] [ text "Unit" ]
-                , th [ class "col-md-1" ] [ text "Stock" ]
+            [ thead [ class "thead-dark" ]
+                [ tr []
+                    [ th [ class "col-md-4" ] [ text "Name" ]
+                    , th [ class "col-md-1" ] [ text "Dose" ]
+                    , th [ class "col-md-1" ] [ text "Unit" ]
+                    , th [ class "col-md-1" ] [ text "Stock" ]
+                    ]
                 ]
+            , tbody [] (List.map (\l -> viewMedicineRead l) medicines)
             ]
-        , tbody [] (List.map (\l -> viewMedicineRead l) medicines)
-        ]
+
 
 viewMedicineList : Medicines -> (Medicine -> msg) -> (Medicine -> msg) -> msg -> (Medicine -> msg) -> Html msg
 viewMedicineList medicines onEdit onDelete onAdd onAddStock =
     if List.isEmpty medicines then
         div [ class "alert alert-info col-md-3" ] [ text "No medicines found" ]
+
     else
         table [ class "medicines-edit table table-striped table-condensed table-hover" ]
             [ thead [ class "thead-dark" ]
                 [ tr []
-                    [ th [ class "col-md-4"] [ text "Name" ]
+                    [ th [ class "col-md-4" ] [ text "Name" ]
                     , th [ class "col-md-1" ] [ text "Dose" ]
                     , th [ class "col-md-1" ] [ text "Unit" ]
                     , th [ class "col-md-1" ] [ text "Stock" ]
                     , th [ class "col-xs-1" ] [ text "" ]
                     ]
                 ]
-            , tbody [] 
-                (List.append (List.map (\medicine -> viewMedicine medicine onEdit onDelete onAddStock) medicines) [ viewMedicineFormRow onAdd ]) 
+            , tbody []
+                (List.append (List.map (\medicine -> viewMedicine medicine onEdit onDelete onAddStock) medicines) [ viewMedicineFormRow onAdd ])
             ]
-

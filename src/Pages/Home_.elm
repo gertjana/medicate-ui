@@ -11,6 +11,9 @@ import Page exposing (Page)
 import Parts.Footer exposing (footerView)
 import Parts.Header exposing (headerView)
 import View exposing (View)
+
+
+
 -- import Shared.Msg exposing (Msg(..))
 
 
@@ -75,9 +78,11 @@ update msg model =
             Debug.log ("TakeDose" ++ time)
                 ( model, Cmd.batch [ takeDose { onResponse = DailyScheduleApiResponded, time = time } ] )
 
+
 subscriptions : Model -> Sub Msg
 subscriptions _ =
     Sub.none
+
 
 
 -- Views
@@ -90,10 +95,10 @@ medicineContent model =
             div [] [ text "Loading..." ]
 
         Api.Success medicineList ->
-            Models.Medicines.viewMedicineListRead medicineList 
+            Models.Medicines.viewMedicineListRead medicineList
 
         Api.Failure _ ->
-            div [ class "alert alert-danger"] [ text "Something went wrong: " ]
+            div [ class "alert alert-danger" ] [ text "Something went wrong: " ]
 
 
 dailysheduleContent : Model -> Html Msg
@@ -106,21 +111,21 @@ dailysheduleContent model =
             Models.DailySchedule.viewDailySchedule TakeDose dailyScheduleList
 
         Api.Failure httpError ->
-            div [class "alert alert-danger"] [ text ("Something went wrong: " ++ Debug.toString httpError) ]
+            div [ class "alert alert-danger" ] [ text ("Something went wrong: " ++ Debug.toString httpError) ]
+
 
 welcomeContent : Html Msg
 welcomeContent =
-    div [ class "welcome" ] 
-    [ h3 [] [ text "Welcome" ] 
-    , article [] 
-        [ p [] [ text "Medikeit (phonetic spelling of Medicate) is an application to maintain your stock of medicines, take doses, add stock and get an idea when you're about to run out. " ]
-        , p [] [ text "This application is built with Elm in the front and Scala ZIO (zio-http, zio-redis) in the back." ]
-        , p [] [ text "The source code is available on Github: " ]
-        , p [] [a [ href "https://github.com/gertjena/medicate" ] [ text "https://github.com/gertjana/medicate" ]]
-        , p [] [ text "This application is a work in progress and grown out of my own need to keep track of my medicines and learn Elm, Scala 3 and ZIO" ]
+    div [ class "welcome" ]
+        [ h3 [] [ text "Welcome" ]
+        , article []
+            [ p [] [ text "Medikeit (phonetic spelling of Medicate) is an application to maintain your stock of medicines, take doses, add stock and get an idea when you're about to run out. " ]
+            , p [] [ text "This application is built with Elm in the front and Scala ZIO (zio-http, zio-redis) in the back." ]
+            , p [] [ text "The source code is available on Github: " ]
+            , p [] [ a [ href "https://github.com/gertjena/medicate" ] [ text "https://github.com/gertjana/medicate" ] ]
+            , p [] [ text "This application is a work in progress and grown out of my own need to keep track of my medicines and learn Elm, Scala 3 and ZIO" ]
+            ]
         ]
-    ]
-
 
 
 contentView : Model -> Html Msg
