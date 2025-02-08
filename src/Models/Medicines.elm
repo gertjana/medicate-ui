@@ -1,4 +1,4 @@
-module Models.Medicines exposing (Medicine, Medicines, medicineDecoder, medicineListDecoder, toString, viewMedicineList, viewMedicineListRead)
+module Models.Medicines exposing (Medicine, CreateMedicine,Medicines, medicineDecoder, medicineListDecoder, toString, viewMedicineList, viewMedicineListRead)
 
 import FeatherIcons
 import Html exposing (Html, a, div, input, table, tbody, td, text, th, thead, tr)
@@ -11,6 +11,13 @@ import Json.Decode.Pipeline exposing (required)
 type alias Medicine =
     { id : String
     , name : String
+    , dose : Float
+    , unit : String
+    , stock : Float
+    }
+
+type alias CreateMedicine =
+    { name : String
     , dose : Float
     , unit : String
     , stock : Float

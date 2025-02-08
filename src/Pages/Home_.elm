@@ -75,8 +75,7 @@ update msg model =
             )
 
         TakeDose time ->
-            Debug.log ("TakeDose" ++ time)
-                ( model, Cmd.batch [ takeDose { onResponse = DailyScheduleApiResponded, time = time } ] )
+            ( model, Cmd.batch [ takeDose { onResponse = DailyScheduleApiResponded, time = time } ] )
 
 
 subscriptions : Model -> Sub Msg
@@ -110,8 +109,8 @@ dailysheduleContent model =
         Api.Success dailyScheduleList ->
             Models.DailySchedule.viewDailySchedule TakeDose dailyScheduleList
 
-        Api.Failure httpError ->
-            div [ class "alert alert-danger" ] [ text ("Something went wrong: " ++ Debug.toString httpError) ]
+        Api.Failure _ ->
+            div [ class "alert alert-danger" ] [ text "Something went wrong: " ]
 
 
 welcomeContent : Html Msg

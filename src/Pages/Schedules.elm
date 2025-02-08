@@ -65,8 +65,8 @@ scheduleContent model =
         Api.Success scheduleList ->
             viewSchedules scheduleList
 
-        Api.Failure httpError ->
-            div [ class "alert alert-danger" ] [ text ("Something went wrong: " ++ Debug.toString httpError) ]
+        Api.Failure _ ->
+            div [ class "alert alert-danger" ] [ text "Something went wrong: " ]
 
 
 contentView : Model -> Html Msg

@@ -1,4 +1,4 @@
-module Models.Schedules exposing (Schedules, scheduleListDecoder, viewSchedules)
+module Models.Schedules exposing (Schedules, CreateSchedule,scheduleListDecoder, viewSchedules)
 
 import Html exposing (Html, div, table, tbody, td, text, th, thead, tr)
 import Html.Attributes exposing (class)
@@ -14,6 +14,12 @@ type alias Schedule =
     , amount : Float
     }
 
+type alias CreateSchedule =
+    { time : String
+    , medicineId : String
+    , description : String
+    , amount : Float
+    }
 
 scheduleDecoder : Decoder Schedule
 scheduleDecoder =

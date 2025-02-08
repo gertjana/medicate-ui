@@ -8,7 +8,7 @@ footerView : Html msg
 footerView =
     div [ class "footer" ]
         [ div [ class "col-md-1 logo" ]
-            [ img [ src "/static/logo_ga_code_white.svg", class "logo" ] [] ]
+            [ img [ src "images/logo_ga_code_white.svg", class "logo" ] [] ]
         , p [ class "center-block" ]
             [ text "copyright 2025 - "
             , a [ href "https://gertjanassies.dev" ] [ text "gertjanassies.dev" ]

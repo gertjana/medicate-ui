@@ -6,11 +6,9 @@ import Models.Dosagehistory exposing (DosageHistories, dosageHistoriesDecoder)
 import Models.Medicines exposing (Medicines, medicineListDecoder)
 import Models.Schedules exposing (Schedules, scheduleListDecoder)
 
-
 backendUrl : String
-backendUrl =
-    "http://localhost:8080"
-
+-- backendUrl = "https://medicate-backend-1-0.onrender.com"
+backendUrl = "http://localhost:8080"
 
 getMedicines : { onResponse : Result Http.Error Medicines -> msg } -> Cmd msg
 getMedicines options =
@@ -47,7 +45,7 @@ getDosageHistory options =
 takeDose : { onResponse : Result Http.Error DailySchedule -> msg, time : String } -> Cmd msg
 takeDose options =
     Http.post
-        { url = "http://localhost:8080/schedules/takedose?time=" ++ options.time
+        { url = backendUrl ++ "/schedules/takedose?time=" ++ options.time
         , body = Http.emptyBody
         , expect = Http.expectJson options.onResponse dailyScheduleDecoder
         }

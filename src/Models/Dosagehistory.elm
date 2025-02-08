@@ -7,7 +7,8 @@ import Json.Decode.Pipeline exposing (required)
 
 
 type alias DosageHistory =
-    { date : String
+    { id : String
+    , date : String
     , time : String
     , medicine : String
     , description : String
@@ -18,6 +19,7 @@ type alias DosageHistory =
 dosageHistoryDecoder : Decoder DosageHistory
 dosageHistoryDecoder =
     Decode.succeed DosageHistory
+        |> required "id" Decode.string
         |> required "date" Decode.string
         |> required "time" Decode.string
         |> required "medicineId" Decode.string

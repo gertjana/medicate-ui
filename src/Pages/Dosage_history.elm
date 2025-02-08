@@ -65,8 +65,8 @@ dosageHistoryContent model =
         Api.Success dosageHistoryList ->
             viewDosageHistories dosageHistoryList
 
-        Api.Failure httpError ->
-            div [] [ text ("Something went wrong: " ++ Debug.toString httpError) ]
+        Api.Failure _ ->
+            div [] [ text "Something went wrong " ]
 
 
 contentView : Model -> Html Msg

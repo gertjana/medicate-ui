@@ -5,7 +5,7 @@
   color: white;
   padding-left: 20px;
   /* margin-bottom: 25px; */
-  background-image: url('/static/medication.svg');
+  background-image: url('images/medication.svg');
   background-size: 42px;
   background-repeat: no-repeat;
   background-position: 5px 5px;

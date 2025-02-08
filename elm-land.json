@@ -4,7 +4,9 @@
       "development": { "debugger": true },
       "production": { "debugger": false }
     },
-    "env": [],
+    "env": [
+      { "name": "MEDICATE_API_URL", "value": "http://localhost:8080" }
+    ],
     "html": {
       "attributes": {
         "html": { "lang": "en" },

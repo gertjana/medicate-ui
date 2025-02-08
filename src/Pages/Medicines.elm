@@ -60,20 +60,16 @@ update msg model =
             , Cmd.none
             )
 
-        EditMedicine medicine ->
-            Debug.log ("EditMedicine: " ++ Debug.toString medicine)
+        EditMedicine _ ->
                 ( model, Cmd.none )
 
-        DeleteMedicine medicine ->
-            Debug.log ("DeleteMedicine: " ++ Debug.toString medicine)
+        DeleteMedicine _ ->
                 ( model, Cmd.none )
 
         AddMedicine ->
-            Debug.log "AddMedicine: "
                 ( model, Cmd.none )
 
-        AddStock medicine ->
-            Debug.log ("AddStock: " ++ Debug.toString medicine)
+        AddStock _ ->
                 ( model, Cmd.none )
 
 
