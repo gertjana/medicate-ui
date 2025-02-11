@@ -1,13 +1,12 @@
-module Api.MedicateApi exposing (getDailySchedule, getDosageHistory, getMedicines, getSchedules, takeDose)
+module Api.MedicateApi exposing (getDailySchedule, getDosageHistory, getMedicines, getSchedules, takeDose, takeDoseForDate, getWeeklySchedule)
 
 import Http
-import Models.DailySchedule exposing (DailySchedule, dailyScheduleDecoder)
+import Models.DailySchedule exposing (DailySchedule, dailyScheduleDecoder, DailyScheduleWithDate, dailyScheduleWithDateDecoder)
 import Models.Dosagehistory exposing (DosageHistories, dosageHistoriesDecoder)
 import Models.Medicines exposing (Medicines, medicineListDecoder)
 import Models.Schedules exposing (Schedules, scheduleListDecoder)
 
 backendUrl : String
--- backendUrl = "https://medicate-backend-1-0.onrender.com"
 backendUrl = "http://localhost:8080"
 
 getMedicines : { onResponse : Result Http.Error Medicines -> msg } -> Cmd msg
@@ -42,10 +41,25 @@ getDosageHistory options =
         }
 
 
-takeDose : { onResponse : Result Http.Error DailySchedule -> msg, time : String } -> Cmd msg
+takeDose : { onResponse : Result Http.Error DailySchedule -> msg,time : String } -> Cmd msg
 takeDose options =
     Http.post
         { url = backendUrl ++ "/schedules/takedose?time=" ++ options.time
         , body = Http.emptyBody
         , expect = Http.expectJson options.onResponse dailyScheduleDecoder
+        }
+
+takeDoseForDate : { onResponse : Result Http.Error DailyScheduleWithDate -> msg, time: String, date: String } -> Cmd msg
+takeDoseForDate options =
+    Http.post
+        { url = backendUrl ++ "/schedules/takedose?date=" ++ options.date ++ "&time=" ++ options.time
+        , body = Http.emptyBody
+        , expect = Http.expectJson options.onResponse dailyScheduleWithDateDecoder
+        }
+
+getWeeklySchedule : { onResponse : Result Http.Error DailyScheduleWithDate -> msg } -> Cmd msg
+getWeeklySchedule options =
+    Http.get
+        { url = backendUrl ++ "/schedules/lastweek"
+        , expect = Http.expectJson options.onResponse dailyScheduleWithDateDecoder
         }

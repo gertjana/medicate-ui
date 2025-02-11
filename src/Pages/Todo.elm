@@ -16,12 +16,12 @@ page =
 
 todo : List ( String, String )
 todo =
-    [ ( "doing", "BE: make the dosage history page a timeline" )
-    , ( "", "BE: Calculate days left from daily schedule" )
+    [ ( "", "BE: Calculate days left from daily schedule" )
     , ( "", "BE/FE: CRUD for medicines" )
     , ( "", "BE/FE: CRUD for schedules" )
     , ( "", "BE/FE: Add Stock button" )
     , ( "", "FE: Add a page for the about page" )
+    , ( "done", "BE: make the dosage history page a timeline" )
     , ( "done", "CI: Configuration for environment" )
     , ( "done", "CI: Create Docker container to host both FE and BE" )
     , ( "done", "BE: have the dose taken reduce the medicine stock" )

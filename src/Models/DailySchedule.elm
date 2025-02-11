@@ -1,6 +1,6 @@
 module Models.DailySchedule exposing (..)
 
-import Html exposing (Html, button, div, li, table, tbody, td, text, th, thead, tr, ul)
+import Html exposing (Html, button, div, li, table, tbody, td, text, th, thead, tr, ul, h4)
 import Html.Attributes exposing (class)
 import Html.Events exposing (onClick)
 import Json.Decode as Decode exposing (Decoder)
@@ -11,6 +11,25 @@ import Models.Medicines exposing (Medicine, medicineDecoder)
 type alias MedicineDosage =
     ( Medicine, Float )
 
+type alias MedicineDosages =
+    List MedicineDosage
+
+type alias DailyScheduleEntry =
+    { time : String
+    , medicines : MedicineDosages
+    , taken : Bool
+    }
+
+type alias DailySchedule =
+    List DailyScheduleEntry
+
+type alias DailyScheduleWithDateEntry =
+    { date : String
+    , schedule : DailySchedule
+    }
+
+type alias DailyScheduleWithDate =
+    List DailyScheduleWithDateEntry
 
 medicineDosageDecoder : Decoder MedicineDosage
 medicineDosageDecoder =
@@ -19,20 +38,10 @@ medicineDosageDecoder =
         (Decode.index 1 Decode.float)
 
 
-type alias MedicineDosages =
-    List MedicineDosage
-
-
 medicineDosagesDecoder : Decoder MedicineDosages
 medicineDosagesDecoder =
     Decode.list medicineDosageDecoder
 
-
-type alias DailyScheduleEntry =
-    { time : String
-    , medicines : MedicineDosages
-    , taken : Bool
-    }
 
 
 dailyScheduleEntryDecoder : Decoder DailyScheduleEntry
@@ -43,20 +52,41 @@ dailyScheduleEntryDecoder =
         |> optional "taken" Decode.bool False
 
 
-type alias DailySchedule =
-    List DailyScheduleEntry
-
-
 dailyScheduleDecoder : Decoder DailySchedule
 dailyScheduleDecoder =
     Decode.list dailyScheduleEntryDecoder
 
+
+dailyScheduleWithDateEntryDecoder : Decoder DailyScheduleWithDateEntry
+dailyScheduleWithDateEntryDecoder =
+    Decode.succeed DailyScheduleWithDateEntry
+        |> required "date" Decode.string
+        |> required "schedules" dailyScheduleDecoder
+
+dailyScheduleWithDateDecoder : Decoder DailyScheduleWithDate
+dailyScheduleWithDateDecoder =
+    Decode.list dailyScheduleWithDateEntryDecoder
+
+
+-- Views
 
 viewActionButtons : (String -> msg) -> String -> Bool -> Html msg
 viewActionButtons onTakeDose time taken =
     if not taken then
         div []
             [ button [ class "btn btn-xs btn-primary", onClick (onTakeDose time) ] [ text "take dose" ]
+            ]
+
+    else
+        div []
+            [ button [ class "btn btn-xs btn-light" ] [ text "dose taken" ]
+            ]
+
+viewActionButtonsForDate : ((String, String) -> msg) -> String -> String -> Bool -> Html msg
+viewActionButtonsForDate onTakeDoseForDate date time taken =
+    if not taken then
+        div []
+            [ button [ class "btn btn-xs btn-primary", onClick (onTakeDoseForDate (date, time)) ] [ text "take dose" ]
             ]
 
     else
@@ -95,7 +125,7 @@ viewDailyScheduleEntry onTakeDose dialyScheduleEntry =
 
 
 viewDailySchedule : (String -> msg) -> DailySchedule -> Html msg
-viewDailySchedule onTakeDose dailySchedule =
+viewDailySchedule onTakeDoseForDate dailySchedule =
     if List.isEmpty dailySchedule then
         div [ class "alert alert-info col-md-4" ] [ text "No daily schedule found" ]
 
@@ -107,5 +137,42 @@ viewDailySchedule onTakeDose dailySchedule =
                     , th [ class "col-md-3 " ] [ text "Medicines" ]
                     ]
                 ]
-            , tbody [] (List.map (\l -> viewDailyScheduleEntry onTakeDose l) dailySchedule)
+            , tbody [] (List.map (\l -> viewDailyScheduleEntry onTakeDoseForDate l) dailySchedule)
             ]
+
+viewDailyScheduleWithDateEntry : String ->((String, String) -> msg) -> DailyScheduleEntry -> Html msg
+viewDailyScheduleWithDateEntry date onTakeDoseForDate dailyScheduleWithDateEntry =
+    tr []
+        [ td [] [ text dailyScheduleWithDateEntry.time, viewActionButtonsForDate onTakeDoseForDate date dailyScheduleWithDateEntry.time dailyScheduleWithDateEntry.taken ]
+        , td [] [ viewMedicineDosages dailyScheduleWithDateEntry.medicines ]
+        ]
+
+viewDailySchedulesWithDate : ((String, String) -> msg) -> DailyScheduleWithDateEntry -> Html msg
+viewDailySchedulesWithDate onTakeDoseForDate dailyScheduleWithDateEntry =
+    div [class "weekly-schedule col-md-4"] [
+        if List.isEmpty dailyScheduleWithDateEntry.schedule then
+            div [ class "alert alert-info col-md-4" ] [ text "No daily schedule found" ]
+        else
+            div [class "card"]
+            [ h4 [class "card-title"] [text dailyScheduleWithDateEntry.date]
+            , table [ class "dailyschedule table table-striped table-condensed table-hover table-bordered" ]
+                    [ thead [ class "thead-dark" ]
+                        [ tr []
+                            [ th [ class "col-xs-1" ] [ text "Time" ]
+                            , th [ class "col-xs-3 " ] [ text "Medicines" ]
+                            ]
+                        ]
+                    , tbody [] (List.map (\l -> viewDailyScheduleWithDateEntry dailyScheduleWithDateEntry.date onTakeDoseForDate l) dailyScheduleWithDateEntry.schedule)
+                    ]
+                ]
+            ]
+
+viewDailyScheduleWithDateWrapper : ((String, String) -> msg) -> DailyScheduleWithDate -> Html msg
+viewDailyScheduleWithDateWrapper onTakeDoseForDate dailyScheduleWithDateWrapper =
+    if List.isEmpty dailyScheduleWithDateWrapper then
+        div [ class "alert alert-info col-md-4" ] [ text "No schedules found" ]
+    else
+        div [class "horizontal-scrollable"] [ 
+            div [class "row flex-row"] (List.map (\d -> viewDailySchedulesWithDate onTakeDoseForDate d) dailyScheduleWithDateWrapper)
+        ]
+

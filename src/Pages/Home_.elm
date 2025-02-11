@@ -109,8 +109,8 @@ dailysheduleContent model =
         Api.Success dailyScheduleList ->
             Models.DailySchedule.viewDailySchedule TakeDose dailyScheduleList
 
-        Api.Failure _ ->
-            div [ class "alert alert-danger" ] [ text "Something went wrong: " ]
+        Api.Failure httpError ->
+            div [ class "alert alert-danger" ] [ text ("Something went wrong: " ++ Debug.toString httpError) ]
 
 
 welcomeContent : Html Msg
@@ -132,16 +132,18 @@ contentView model =
     div [ class "container-fluid" ]
         [ div [ class "col-md-12" ]
             [ headerView ]
-        , div [ class "col-md-4" ]
-            [ welcomeContent ]
-        , div [ class "col-md-4 content" ]
-            [ h3 [] [ text "Daily Schedule" ]
-            , dailysheduleContent model
-            ]
-        , div [ class "col-md-8 content" ]
-            [ h3 [] [ text "Medicines" ]
-            , medicineContent model
-            ]
+        , div [ class "row" ] [
+            div [ class "col-md-4" ]
+                [ welcomeContent ]
+            , div [ class "col-md-4 content" ]
+                [ h3 [] [ text "Daily Schedule" ]
+                , dailysheduleContent model
+                ]
+            , div [ class "col-md-8 content" ]
+                [ h3 [] [ text "Medicines" ]
+                , medicineContent model
+                ]
+        ]
         , div [ class "col-md-12 footer" ]
             [ footerView ]
         ]
