@@ -1,7 +1,7 @@
 module Pages.Schedules exposing (Model, Msg, page)
 
 import Api exposing (Data(..))
-import Api.MedicateApi exposing (getSchedules, getWeeklySchedule, takeDoseForDate)
+import Api.MedicateApi exposing (getSchedules, getPastSchedule, takeDoseForDate)
 import Html exposing (Html, div, h3, text)
 import Html.Attributes exposing (class)
 import Http
@@ -26,18 +26,18 @@ page =
 
 type alias Model =
     { scheduleData : Api.Data Schedules
-    , weeklyScheduleData : Api.Data DailyScheduleWithDate
+    , pastScheduleData : Api.Data DailyScheduleWithDate
     }
 
 
 init : ( Model, Cmd Msg )
 init =
     ( { scheduleData = Api.Loading
-      , weeklyScheduleData = Api.Loading
+      , pastScheduleData = Api.Loading
       }
     , Cmd.batch
         [ getSchedules { onResponse = ScheduleApiResponded }
-        , getWeeklySchedule { onResponse = WeeklyScheduleApiResponded }
+        , getPastSchedule { onResponse = WeeklyScheduleApiResponded }
         ]
     )
 
@@ -61,12 +61,12 @@ update msg model =
             )
 
         WeeklyScheduleApiResponded (Ok weeklySchedule) ->
-            ( { model | weeklyScheduleData = Api.Success weeklySchedule }
+            ( { model | pastScheduleData = Api.Success weeklySchedule }
             , Cmd.none
             )
 
         WeeklyScheduleApiResponded (Err httpError) ->
-            ( { model | weeklyScheduleData = Api.Failure httpError }
+            ( { model | pastScheduleData = Api.Failure httpError }
             , Cmd.none
             )
 
@@ -86,9 +86,9 @@ scheduleContent model =
         Api.Failure _ ->
             div [ class "alert alert-danger" ] [ text "Something went wrong: " ]
 
-weeklyScheduleContent : Model -> Html Msg
-weeklyScheduleContent model =
-    case model.weeklyScheduleData of
+pastScheduleContent : Model -> Html Msg
+pastScheduleContent model =
+    case model.pastScheduleData of
         Api.Loading ->
             div [] [ text "Loading..." ]
 
@@ -107,8 +107,8 @@ contentView model =
         [ div [ class "col-md-12" ]
             [ headerView ]
         , div [class "col-md-12"]
-            [ h3 [] [ text "Weekly Schedule" ]
-            , weeklyScheduleContent model
+            [ h3 [] [ text "Past Schedules" ]
+            , pastScheduleContent model
             ]
         , div [ class "col-md-4 content" ]
             [ h3 [] [ text "Schedules" ]

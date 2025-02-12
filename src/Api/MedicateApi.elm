@@ -1,4 +1,4 @@
-module Api.MedicateApi exposing (getDailySchedule, getDosageHistory, getMedicines, getSchedules, takeDose, takeDoseForDate, getWeeklySchedule)
+module Api.MedicateApi exposing (getDailySchedule, getDosageHistory, getMedicines, getSchedules, takeDose, takeDoseForDate, getPastSchedule)
 
 import Http
 import Models.DailySchedule exposing (DailySchedule, dailyScheduleDecoder, DailyScheduleWithDate, dailyScheduleWithDateDecoder)
@@ -57,9 +57,9 @@ takeDoseForDate options =
         , expect = Http.expectJson options.onResponse dailyScheduleWithDateDecoder
         }
 
-getWeeklySchedule : { onResponse : Result Http.Error DailyScheduleWithDate -> msg } -> Cmd msg
-getWeeklySchedule options =
+getPastSchedule : { onResponse : Result Http.Error DailyScheduleWithDate -> msg } -> Cmd msg
+getPastSchedule options =
     Http.get
-        { url = backendUrl ++ "/schedules/lastweek"
+        { url = backendUrl ++ "/schedules/past"
         , expect = Http.expectJson options.onResponse dailyScheduleWithDateDecoder
         }
