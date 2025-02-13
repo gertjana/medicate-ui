@@ -1,4 +1,5 @@
-module Models.Medicines exposing (Medicine, CreateMedicine,Medicines, medicineDecoder, medicineListDecoder, toString, viewMedicineList, viewMedicineListRead)
+module Models.Medicines exposing (Medicine, Medicines, toString, 
+    medicineDecoder, medicineListDecoder, medicinesWithDaysLeftDecoder, viewMedicineList, viewMedicineListRead)
 
 import FeatherIcons
 import Html exposing (Html, a, div, input, table, tbody, td, text, th, thead, tr)
@@ -11,13 +12,6 @@ import Json.Decode.Pipeline exposing (required)
 type alias Medicine =
     { id : String
     , name : String
-    , dose : Float
-    , unit : String
-    , stock : Float
-    }
-
-type alias CreateMedicine =
-    { name : String
     , dose : Float
     , unit : String
     , stock : Float
@@ -37,11 +31,25 @@ medicineDecoder =
 type alias Medicines =
     List Medicine
 
+type alias MedicineWithDaysLeft = 
+    (Medicine, Int)
+
+type alias MedicinesWithDaysLeft =
+    List MedicineWithDaysLeft
 
 medicineListDecoder : Decoder Medicines
 medicineListDecoder =
     Decode.list medicineDecoder
 
+medicinesWithDaysLeftDecoder : Decoder MedicinesWithDaysLeft
+medicinesWithDaysLeftDecoder =
+    Decode.list medicineWithDaysLeftDecoder
+
+medicineWithDaysLeftDecoder : Decoder MedicineWithDaysLeft
+medicineWithDaysLeftDecoder =
+    Decode.map2 Tuple.pair
+        (Decode.index 0 medicineDecoder)
+        (Decode.index 1 Decode.int)
 
 toString : Medicine -> String
 toString medicine =
@@ -89,13 +97,19 @@ viewMedicine medicine onEdit onDelete onAddStock =
         ]
 
 
+<<<<<<< HEAD
 viewMedicineRead : Medicine -> Html msg
 viewMedicineRead medicine =
+=======
+viewMedicineRead : (Medicine, Int) -> Html msg
+viewMedicineRead (medicine, daysLeft) =
+>>>>>>> 37a3c0c (implemented daysleft)
     tr []
         [ td [] [ text medicine.name ]
         , td [] [ text (String.fromFloat medicine.dose) ]
         , td [] [ text medicine.unit ]
         , td [] [ text (String.fromFloat medicine.stock) ]
+        , td [] [ text (String.fromInt daysLeft) ]
         ]
 
 
@@ -110,9 +124,15 @@ viewMedicineFormRow onAdd =
         ]
 
 
+<<<<<<< HEAD
 viewMedicineListRead : Medicines -> Html msg
 viewMedicineListRead medicines =
     if List.isEmpty medicines then
+=======
+viewMedicineListRead : (List (Medicine, Int)) -> Html msg
+viewMedicineListRead getMedicinesWithDaysLeft =
+    if List.isEmpty getMedicinesWithDaysLeft then
+>>>>>>> 37a3c0c (implemented daysleft)
         div [ class "alert alert-info col-md-3" ] [ text "No medicines found" ]
 
     else
@@ -123,9 +143,10 @@ viewMedicineListRead medicines =
                     , th [ class "col-md-1" ] [ text "Dose" ]
                     , th [ class "col-md-1" ] [ text "Unit" ]
                     , th [ class "col-md-1" ] [ text "Stock" ]
+                    , th [ class "col-md-1" ] [ text "Days Left" ]
                     ]
                 ]
-            , tbody [] (List.map (\l -> viewMedicineRead l) medicines)
+            , tbody [] (List.map (\l -> viewMedicineRead l) getMedicinesWithDaysLeft)
             ]
 
 

@@ -1,9 +1,9 @@
-module Api.MedicateApi exposing (getDailySchedule, getDosageHistory, getMedicines, getSchedules, takeDose, takeDoseForDate, getPastSchedule)
+module Api.MedicateApi exposing (getDailySchedule, getDosageHistory, getMedicines, getMedicinesWithDaysLeft, getSchedules, takeDose)
 
 import Http
 import Models.DailySchedule exposing (DailySchedule, dailyScheduleDecoder, DailyScheduleWithDate, dailyScheduleWithDateDecoder)
 import Models.Dosagehistory exposing (DosageHistories, dosageHistoriesDecoder)
-import Models.Medicines exposing (Medicines, medicineListDecoder)
+import Models.Medicines exposing (Medicine, Medicines, medicineListDecoder, medicinesWithDaysLeftDecoder)
 import Models.Schedules exposing (Schedules, scheduleListDecoder)
 
 backendUrl : String
@@ -14,6 +14,14 @@ getMedicines options =
     Http.get
         { url = backendUrl ++ "/medicines"
         , expect = Http.expectJson options.onResponse medicineListDecoder
+        }
+
+
+getMedicinesWithDaysLeft : { onResponse : Result Http.Error (List ( Medicine, Int )) -> msg } -> Cmd msg
+getMedicinesWithDaysLeft options =
+    Http.get
+        { url = "http://localhost:8080/schedules/daysleft"
+        , expect = Http.expectJson options.onResponse medicinesWithDaysLeftDecoder
         }
 
 

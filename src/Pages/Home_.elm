@@ -1,12 +1,12 @@
 module Pages.Home_ exposing (Model, Msg, page)
 
 import Api exposing (Data(..))
-import Api.MedicateApi exposing (getDailySchedule, getMedicines, takeDose)
+import Api.MedicateApi exposing (getDailySchedule, getMedicinesWithDaysLeft, takeDose)
 import Html exposing (..)
 import Html.Attributes exposing (class, href)
 import Http
 import Models.DailySchedule exposing (DailySchedule)
-import Models.Medicines exposing (Medicines)
+import Models.Medicines exposing (Medicine)
 import Page exposing (Page)
 import Parts.Footer exposing (footerView)
 import Parts.Header exposing (headerView)
@@ -28,7 +28,7 @@ page =
 
 
 type alias Model =
-    { medicineData : Api.Data Medicines
+    { medicineData : Api.Data (List (Medicine, Int))
     , dailyScheduleData : Api.Data DailySchedule
     }
 
@@ -39,14 +39,14 @@ init =
       , dailyScheduleData = Api.Loading
       }
     , Cmd.batch
-        [ getMedicines { onResponse = MedicineApiResponded }
+        [ getMedicinesWithDaysLeft { onResponse = MedicineApiResponded }
         , getDailySchedule { onResponse = DailyScheduleApiResponded }
         ]
     )
 
 
 type Msg
-    = MedicineApiResponded (Result Http.Error Medicines)
+    = MedicineApiResponded (Result Http.Error (List (Medicine, Int)))
     | DailyScheduleApiResponded (Result Http.Error DailySchedule)
     | TakeDose String
 
@@ -94,10 +94,10 @@ medicineContent model =
             div [] [ text "Loading..." ]
 
         Api.Success medicineList ->
-            Models.Medicines.viewMedicineListRead medicineList
+            Models.Medicines.viewMedicineListRead  medicineList 
 
-        Api.Failure _ ->
-            div [ class "alert alert-danger" ] [ text "Something went wrong: " ]
+        Api.Failure httpError ->
+            div [] [ text ("Something went wrong: " ++ Debug.toString httpError) ]
 
 
 dailysheduleContent : Model -> Html Msg
