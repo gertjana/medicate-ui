@@ -41,7 +41,7 @@ getDosageHistory options =
         }
 
 
-takeDose : { onResponse : Result Http.Error DailySchedule -> msg,time : String } -> Cmd msg
+takeDose : { onResponse : Result Http.Error DailySchedule -> msg, time : String } -> Cmd msg
 takeDose options =
     Http.post
         { url = backendUrl ++ "/schedules/takedose?time=" ++ options.time

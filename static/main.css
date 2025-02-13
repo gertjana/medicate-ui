@@ -10,6 +10,7 @@
   background-size: 42px;
   background-repeat: no-repeat;
   background-position: 5px 5px;
+  margin-bottom: 10px;
 }
 
 .horizontal-scrollable > .row {
@@ -93,16 +94,13 @@ nav a.navbar-brand {
   font-size: 25px;
   border: none;
   margin-right: 20px;
-  margin-top: 0px;
   background-color: inherit;
 }
 nav a {
   color: white;
   text-decoration: none;
-  padding: 10px;
   border-left: 1px solid #2e6da4;
-  padding-bottom: 5px;
-  margin-top: 20px;
+  padding: 0px 0px 5px 0px;
   font-size: 1.2em;
 }
 
