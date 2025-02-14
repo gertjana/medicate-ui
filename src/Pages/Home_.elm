@@ -6,7 +6,7 @@ import Html exposing (..)
 import Html.Attributes exposing (class, href)
 import Http
 import Models.DailySchedule exposing (DailySchedule)
-import Models.Medicines exposing (Medicine)
+import Models.Medicines exposing (Medicine, MedicinesWithDaysLeft)
 import Page exposing (Page)
 import Parts.Footer exposing (footerView)
 import Parts.Header exposing (headerView)
@@ -28,7 +28,7 @@ page =
 
 
 type alias Model =
-    { medicineData : Api.Data (List (Medicine, Int))
+    { medicineData : Api.Data MedicinesWithDaysLeft
     , dailyScheduleData : Api.Data DailySchedule
     }
 
@@ -46,7 +46,7 @@ init =
 
 
 type Msg
-    = MedicineApiResponded (Result Http.Error (List (Medicine, Int)))
+    = MedicineApiResponded (Result Http.Error MedicinesWithDaysLeft)
     | DailyScheduleApiResponded (Result Http.Error DailySchedule)
     | TakeDose String
 
@@ -75,7 +75,7 @@ update msg model =
             )
 
         TakeDose time ->
-            ( model, Cmd.batch [ takeDose { onResponse = DailyScheduleApiResponded, time = time } ] )
+            ( model, Cmd.batch [ takeDose { onResponse = DailyScheduleApiResponded, time = time }, getMedicinesWithDaysLeft { onResponse = MedicineApiResponded } ] )
 
 
 subscriptions : Model -> Sub Msg

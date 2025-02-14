@@ -1,4 +1,4 @@
-module Models.Medicines exposing (Medicine, Medicines, toString, 
+module Models.Medicines exposing (Medicine, Medicines, MedicinesWithDaysLeft, MedicineWithDaysLeft, toString, 
     medicineDecoder, medicineListDecoder, medicinesWithDaysLeftDecoder, viewMedicineList, viewMedicineListRead)
 
 import FeatherIcons
@@ -97,13 +97,8 @@ viewMedicine medicine onEdit onDelete onAddStock =
         ]
 
 
-<<<<<<< HEAD
-viewMedicineRead : Medicine -> Html msg
-viewMedicineRead medicine =
-=======
-viewMedicineRead : (Medicine, Int) -> Html msg
+viewMedicineRead : MedicineWithDaysLeft -> Html msg
 viewMedicineRead (medicine, daysLeft) =
->>>>>>> 37a3c0c (implemented daysleft)
     tr []
         [ td [] [ text medicine.name ]
         , td [] [ text (String.fromFloat medicine.dose) ]
@@ -124,15 +119,9 @@ viewMedicineFormRow onAdd =
         ]
 
 
-<<<<<<< HEAD
-viewMedicineListRead : Medicines -> Html msg
-viewMedicineListRead medicines =
-    if List.isEmpty medicines then
-=======
-viewMedicineListRead : (List (Medicine, Int)) -> Html msg
+viewMedicineListRead : MedicinesWithDaysLeft -> Html msg
 viewMedicineListRead getMedicinesWithDaysLeft =
     if List.isEmpty getMedicinesWithDaysLeft then
->>>>>>> 37a3c0c (implemented daysleft)
         div [ class "alert alert-info col-md-3" ] [ text "No medicines found" ]
 
     else
