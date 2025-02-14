@@ -140,3 +140,16 @@ ul.todo {
   text-decoration: line-through;
   color: red;
 } 
+
+div.card-tab {
+  background-color: #7147cb;
+  color: white;
+  padding-left: 10px;
+  border-top-right-radius: 10px;
+  width: 150px;
+}
+
+table.dailyschedule {
+  border: 1px solid #7147cb !important;
+}
+

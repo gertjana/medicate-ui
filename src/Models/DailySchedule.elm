@@ -1,6 +1,6 @@
 module Models.DailySchedule exposing (..)
 
-import Html exposing (Html, button, div, li, table, tbody, td, text, th, thead, tr, ul, h4)
+import Html exposing (Html, button, div, li, table, tbody, td, text, th, thead, tr, ul, span)
 import Html.Attributes exposing (class)
 import Html.Events exposing (onClick)
 import Json.Decode as Decode exposing (Decoder)
@@ -153,8 +153,8 @@ viewDailySchedulesWithDate onTakeDoseForDate dailyScheduleWithDateEntry =
         if List.isEmpty dailyScheduleWithDateEntry.schedule then
             div [ class "alert alert-info col-md-4" ] [ text "No daily schedule found" ]
         else
-            div [class "card"]
-            [ h4 [class "card-title"] [text dailyScheduleWithDateEntry.date]
+            div [class "col-md-4"]
+            [ div [class "card-tab"] [text dailyScheduleWithDateEntry.date]
             , table [ class "dailyschedule table table-striped table-condensed table-hover table-bordered" ]
                     [ thead [ class "thead-dark" ]
                         [ tr []
