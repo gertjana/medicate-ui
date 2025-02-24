@@ -5,14 +5,14 @@ import Api.MedicateApi exposing (getSchedules, getPastSchedule, takeDoseForDate)
 import Html exposing (Html, div, h3, text)
 import Html.Attributes exposing (class)
 import Http
-import Models.Schedules exposing (Schedules, viewSchedules)
+import Models.Schedules exposing (Schedules)
 import Models.DailySchedule exposing (DailyScheduleWithDate)
 import Page exposing (Page)
 import Parts.Footer exposing (footerView)
 import Parts.Header exposing (headerView)
 import View exposing (View)
-import Models.DailySchedule exposing (viewDailyScheduleWithDateWrapper)
-
+import Views.DailySchedules exposing (viewDailyScheduleWithDateWrapper)
+import Views.Schedules exposing (viewSchedules)
 
 page : Page Model Msg
 page =

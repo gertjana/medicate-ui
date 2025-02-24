@@ -5,12 +5,12 @@ import Api.MedicateApi exposing (getDosageHistory)
 import Html exposing (Html, div, h3, text)
 import Html.Attributes exposing (class)
 import Http
-import Models.Dosagehistory exposing (DosageHistories, viewDosageHistories)
+import Models.Dosagehistory exposing (DosageHistories)
 import Page exposing (Page)
 import Parts.Footer exposing (footerView)
 import Parts.Header exposing (headerView)
 import View exposing (View)
-
+import Views.DosageHistory exposing (viewDosageHistories)
 
 page : Page Model Msg
 page =

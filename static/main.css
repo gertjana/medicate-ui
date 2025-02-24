@@ -54,10 +54,15 @@ table.medicines td:last-child a {
 table.medicines-edit td:last-child {
   border: none;
   background-color: white !important;
+  display: flex;
+}
+
+table.medicines-edit td:last-child input {
+  display: inline-block;
 }
 
 table.medicines-edit th:last-child {
-  border: none;
+  /* border: none; */
   background-color: white !important;
 }
 

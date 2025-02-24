@@ -10,6 +10,7 @@ import Page exposing (Page)
 import Parts.Footer exposing (footerView)
 import Parts.Header exposing (headerView)
 import View exposing (View)
+import Views.Medicines exposing (viewMedicineList)
 
 
 type alias Model =
@@ -80,7 +81,7 @@ medicineContent model =
             div [] [ text "Loading..." ]
 
         Api.Success medicineList ->
-            Models.Medicines.viewMedicineList medicineList EditMedicine DeleteMedicine AddMedicine AddStock
+            viewMedicineList medicineList EditMedicine DeleteMedicine AddMedicine AddStock
 
         Api.Failure _ ->
             div [ class "alert alert-danger" ] [ text "Something went wrong: " ]

@@ -6,16 +6,13 @@ import Html exposing (..)
 import Html.Attributes exposing (class, href)
 import Http
 import Models.DailySchedule exposing (DailySchedule)
-import Models.Medicines exposing (Medicine, MedicinesWithDaysLeft)
+import Models.Medicines exposing (MedicinesWithDaysLeft)
 import Page exposing (Page)
 import Parts.Footer exposing (footerView)
 import Parts.Header exposing (headerView)
 import View exposing (View)
-
-
-
--- import Shared.Msg exposing (Msg(..))
-
+import Views.Medicines exposing (viewMedicineListRead)
+import Views.DailySchedules exposing (viewDailySchedule)
 
 page : Page Model Msg
 page =
@@ -49,6 +46,7 @@ type Msg
     = MedicineApiResponded (Result Http.Error MedicinesWithDaysLeft)
     | DailyScheduleApiResponded (Result Http.Error DailySchedule)
     | TakeDose String
+    | AddStock String String
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -77,6 +75,8 @@ update msg model =
         TakeDose time ->
             ( model, Cmd.batch [ takeDose { onResponse = DailyScheduleApiResponded, time = time }, getMedicinesWithDaysLeft { onResponse = MedicineApiResponded } ] )
 
+        AddStock _ _ ->
+            ( model, Cmd.none )
 
 subscriptions : Model -> Sub Msg
 subscriptions _ =
@@ -94,10 +94,10 @@ medicineContent model =
             div [] [ text "Loading..." ]
 
         Api.Success medicineList ->
-            Models.Medicines.viewMedicineListRead  medicineList 
+            viewMedicineListRead  medicineList 
 
         Api.Failure httpError ->
-            div [] [ text ("Something went wrong: " ++ Debug.toString httpError) ]
+            div [ class "alert alert-danger" ] [ text ("Something went wrong: " ++ Debug.toString httpError) ]
 
 
 dailysheduleContent : Model -> Html Msg
@@ -107,7 +107,7 @@ dailysheduleContent model =
             div [] [ text "Loading..." ]
 
         Api.Success dailyScheduleList ->
-            Models.DailySchedule.viewDailySchedule TakeDose dailyScheduleList
+            viewDailySchedule TakeDose dailyScheduleList
 
         Api.Failure httpError ->
             div [ class "alert alert-danger" ] [ text ("Something went wrong: " ++ Debug.toString httpError) ]

@@ -3,7 +3,7 @@ module Api.MedicateApi exposing (getDailySchedule, getDosageHistory, getMedicine
 import Http
 import Models.DailySchedule exposing (DailySchedule, dailyScheduleDecoder, DailyScheduleWithDate, dailyScheduleWithDateDecoder)
 import Models.Dosagehistory exposing (DosageHistories, dosageHistoriesDecoder)
-import Models.Medicines exposing (Medicine, Medicines, medicineListDecoder, medicinesWithDaysLeftDecoder)
+import Models.Medicines exposing (Medicines, medicineListDecoder, medicinesWithDaysLeftDecoder)
 import Models.Schedules exposing (Schedules, scheduleListDecoder)
 import Models.Medicines exposing (MedicinesWithDaysLeft)
 
