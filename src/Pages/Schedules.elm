@@ -1,18 +1,19 @@
 module Pages.Schedules exposing (Model, Msg, page)
 
 import Api exposing (Data(..))
-import Api.MedicateApi exposing (getSchedules, getPastSchedule, takeDoseForDate)
+import Api.MedicateApi exposing (getPastSchedule, getSchedules, takeDoseForDate)
 import Html exposing (Html, div, h3, text)
 import Html.Attributes exposing (class)
 import Http
-import Models.Schedules exposing (Schedules)
 import Models.DailySchedule exposing (DailyScheduleWithDate)
+import Models.Schedules exposing (Schedules)
 import Page exposing (Page)
 import Parts.Footer exposing (footerView)
 import Parts.Header exposing (headerView)
 import View exposing (View)
 import Views.DailySchedules exposing (viewDailyScheduleWithDateWrapper)
 import Views.Schedules exposing (viewSchedules)
+
 
 page : Page Model Msg
 page =
@@ -45,7 +46,8 @@ init =
 type Msg
     = ScheduleApiResponded (Result Http.Error Schedules)
     | WeeklyScheduleApiResponded (Result Http.Error DailyScheduleWithDate)
-    | TakeDoseForDate (String, String)
+    | TakeDoseForDate ( String, String )
+
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
@@ -86,6 +88,7 @@ scheduleContent model =
         Api.Failure _ ->
             div [ class "alert alert-danger" ] [ text "Something went wrong: " ]
 
+
 pastScheduleContent : Model -> Html Msg
 pastScheduleContent model =
     case model.pastScheduleData of
@@ -99,14 +102,12 @@ pastScheduleContent model =
             div [ class "alert alert-danger" ] [ text ("Something went wrong: " ++ Debug.toString httpError_) ]
 
 
-
-
 contentView : Model -> Html Msg
 contentView model =
     div [ class "container-fluid" ]
         [ div [ class "col-md-12" ]
             [ headerView ]
-        , div [class "col-md-12"]
+        , div [ class "col-md-12" ]
             [ h3 [] [ text "Past Schedules" ]
             , pastScheduleContent model
             ]

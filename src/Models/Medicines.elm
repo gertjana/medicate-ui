@@ -1,5 +1,13 @@
-module Models.Medicines exposing (Medicine, Medicines, MedicinesWithDaysLeft, MedicineWithDaysLeft, toString, 
-    medicineDecoder, medicineListDecoder, medicinesWithDaysLeftDecoder)
+module Models.Medicines exposing
+    ( Medicine
+    , MedicineWithDaysLeft
+    , Medicines
+    , MedicinesWithDaysLeft
+    , medicineDecoder
+    , medicineListDecoder
+    , medicinesWithDaysLeftDecoder
+    , toString
+    )
 
 import Json.Decode as Decode exposing (Decoder)
 import Json.Decode.Pipeline exposing (required)
@@ -27,19 +35,24 @@ medicineDecoder =
 type alias Medicines =
     List Medicine
 
-type alias MedicineWithDaysLeft = 
-    (Medicine, Int)
+
+type alias MedicineWithDaysLeft =
+    ( Medicine, Int )
+
 
 type alias MedicinesWithDaysLeft =
     List MedicineWithDaysLeft
+
 
 medicineListDecoder : Decoder Medicines
 medicineListDecoder =
     Decode.list medicineDecoder
 
+
 medicinesWithDaysLeftDecoder : Decoder MedicinesWithDaysLeft
 medicinesWithDaysLeftDecoder =
     Decode.list medicineWithDaysLeftDecoder
+
 
 medicineWithDaysLeftDecoder : Decoder MedicineWithDaysLeft
 medicineWithDaysLeftDecoder =
@@ -47,7 +60,7 @@ medicineWithDaysLeftDecoder =
         (Decode.index 0 medicineDecoder)
         (Decode.index 1 Decode.int)
 
+
 toString : Medicine -> String
 toString medicine =
     medicine.name ++ " ()" ++ String.fromFloat medicine.dose ++ " " ++ medicine.unit ++ ")"
-

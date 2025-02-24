@@ -12,6 +12,7 @@ import Parts.Header exposing (headerView)
 import View exposing (View)
 import Views.DosageHistory exposing (viewDosageHistories)
 
+
 page : Page Model Msg
 page =
     Page.element

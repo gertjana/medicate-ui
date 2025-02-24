@@ -3,9 +3,10 @@ module Views.DailySchedules exposing (..)
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
-import Models.DailySchedule exposing (MedicineDosages, DailySchedule, DailyScheduleEntry, DailyScheduleWithDate, DailyScheduleWithDateEntry)
+import Models.DailySchedule exposing (DailySchedule, DailyScheduleEntry, DailyScheduleWithDate, DailyScheduleWithDateEntry, MedicineDosages)
 import Models.Dosagehistory exposing (..)
 import Models.Medicines exposing (Medicine)
+
 
 viewActionButtons : (String -> msg) -> String -> Bool -> Html msg
 viewActionButtons onTakeDose time taken =
@@ -19,11 +20,12 @@ viewActionButtons onTakeDose time taken =
             [ button [ class "btn btn-xs btn-light" ] [ text "dose taken" ]
             ]
 
-viewActionButtonsForDate : ((String, String) -> msg) -> String -> String -> Bool -> Html msg
+
+viewActionButtonsForDate : (( String, String ) -> msg) -> String -> String -> Bool -> Html msg
 viewActionButtonsForDate onTakeDoseForDate date time taken =
     if not taken then
         div []
-            [ button [ class "btn btn-xs btn-primary", onClick (onTakeDoseForDate (date, time)) ] [ text "take dose" ]
+            [ button [ class "btn btn-xs btn-primary", onClick (onTakeDoseForDate ( date, time )) ] [ text "take dose" ]
             ]
 
     else
@@ -77,22 +79,25 @@ viewDailySchedule onTakeDoseForDate dailySchedule =
             , tbody [] (List.map (\l -> viewDailyScheduleEntry onTakeDoseForDate l) dailySchedule)
             ]
 
-viewDailyScheduleWithDateEntry : String ->((String, String) -> msg) -> DailyScheduleEntry -> Html msg
+
+viewDailyScheduleWithDateEntry : String -> (( String, String ) -> msg) -> DailyScheduleEntry -> Html msg
 viewDailyScheduleWithDateEntry date onTakeDoseForDate dailyScheduleWithDateEntry =
     tr []
         [ td [] [ text dailyScheduleWithDateEntry.time, viewActionButtonsForDate onTakeDoseForDate date dailyScheduleWithDateEntry.time dailyScheduleWithDateEntry.taken ]
         , td [] [ viewMedicineDosages dailyScheduleWithDateEntry.medicines ]
         ]
 
-viewDailySchedulesWithDate : ((String, String) -> msg) -> DailyScheduleWithDateEntry -> Html msg
+
+viewDailySchedulesWithDate : (( String, String ) -> msg) -> DailyScheduleWithDateEntry -> Html msg
 viewDailySchedulesWithDate onTakeDoseForDate dailyScheduleWithDateEntry =
-    div [class "weekly-schedule col-md-4"] [
-        if List.isEmpty dailyScheduleWithDateEntry.schedule then
+    div [ class "weekly-schedule col-md-4" ]
+        [ if List.isEmpty dailyScheduleWithDateEntry.schedule then
             div [ class "alert alert-info col-md-4" ] [ text "No daily schedule found" ]
-        else
-            div [class "col-md-4"]
-            [ div [class "card-tab"] [text dailyScheduleWithDateEntry.date]
-            , table [ class "dailyschedule table table-striped table-condensed table-hover table-bordered" ]
+
+          else
+            div [ class "col-md-4" ]
+                [ div [ class "card-tab" ] [ text dailyScheduleWithDateEntry.date ]
+                , table [ class "dailyschedule table table-striped table-condensed table-hover table-bordered" ]
                     [ thead [ class "thead-dark" ]
                         [ tr []
                             [ th [ class "col-xs-1" ] [ text "Time" ]
@@ -102,13 +107,15 @@ viewDailySchedulesWithDate onTakeDoseForDate dailyScheduleWithDateEntry =
                     , tbody [] (List.map (\l -> viewDailyScheduleWithDateEntry dailyScheduleWithDateEntry.date onTakeDoseForDate l) dailyScheduleWithDateEntry.schedule)
                     ]
                 ]
-            ]
+        ]
 
-viewDailyScheduleWithDateWrapper : ((String, String) -> msg) -> DailyScheduleWithDate -> Html msg
+
+viewDailyScheduleWithDateWrapper : (( String, String ) -> msg) -> DailyScheduleWithDate -> Html msg
 viewDailyScheduleWithDateWrapper onTakeDoseForDate dailyScheduleWithDateWrapper =
     if List.isEmpty dailyScheduleWithDateWrapper then
         div [ class "alert alert-info col-md-4" ] [ text "No schedules found" ]
+
     else
-        div [class "horizontal-scrollable"] [ 
-            div [class "row flex-row"] (List.map (\d -> viewDailySchedulesWithDate onTakeDoseForDate d) dailyScheduleWithDateWrapper)
-        ]
+        div [ class "horizontal-scrollable" ]
+            [ div [ class "row flex-row" ] (List.map (\d -> viewDailySchedulesWithDate onTakeDoseForDate d) dailyScheduleWithDateWrapper)
+            ]

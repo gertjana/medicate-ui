@@ -1,19 +1,18 @@
 module Views.Medicines exposing (viewMedicineList, viewMedicineListRead)
 
+import FeatherIcons
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
-import FeatherIcons
+import Models.Medicines exposing (Medicine, MedicineWithDaysLeft, Medicines, MedicinesWithDaysLeft)
 
-import Models.Medicines exposing (Medicine, Medicines, MedicinesWithDaysLeft, MedicineWithDaysLeft)
+
 
 -- editIcon : msg -> Html msg
 -- editIcon msg =
 --     FeatherIcons.edit
 --         |> FeatherIcons.withSize 16
 --         |> FeatherIcons.toHtml [ onClick msg ]
-
-
 -- deleteIcon : msg -> Html msg
 -- deleteIcon msg =
 --     FeatherIcons.trash
@@ -32,6 +31,7 @@ viewActionButtons : Medicine -> (Medicine -> msg) -> (Medicine -> msg) -> (Medic
 viewActionButtons medicine _ _ onAddStock =
     div []
         [ input [ class "form-control col-md-1", type_ "number", placeholder "Stock" ] []
+
         -- [ a [ class "", title "Edit" ] [ editIcon (onEdit medicine) ]
         -- , a [ class "", title "Delete" ] [ deleteIcon (onDelete medicine) ]
         , a [ class "", title "Add Stock" ] [ addStockIcon (onAddStock medicine) ]
@@ -50,7 +50,7 @@ viewMedicine medicine onEdit onDelete onAddStock =
 
 
 viewMedicineRead : MedicineWithDaysLeft -> Html msg
-viewMedicineRead (medicine, daysLeft) =
+viewMedicineRead ( medicine, daysLeft ) =
     tr []
         [ td [] [ text medicine.name ]
         , td [] [ text (String.fromFloat medicine.dose) ]
@@ -109,5 +109,6 @@ viewMedicineList medicines onEdit onDelete _ onAddStock =
                 ]
             , tbody []
                 (List.map (\medicine -> viewMedicine medicine onEdit onDelete onAddStock) medicines)
-                -- (List.append (List.map (\medicine -> viewMedicine medicine onEdit onDelete onAddStock) medicines) [ viewMedicineFormRow onAdd ])
+
+            -- (List.append (List.map (\medicine -> viewMedicine medicine onEdit onDelete onAddStock) medicines) [ viewMedicineFormRow onAdd ])
             ]

@@ -32,5 +32,3 @@ type alias DosageHistories =
 dosageHistoriesDecoder : Decoder DosageHistories
 dosageHistoriesDecoder =
     Decode.list dosageHistoryDecoder
-
-

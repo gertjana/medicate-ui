@@ -1,14 +1,16 @@
-module Api.MedicateApi exposing (getDailySchedule, getDosageHistory, getMedicines, getMedicinesWithDaysLeft, getSchedules, takeDose, takeDoseForDate, getPastSchedule)
+module Api.MedicateApi exposing (getDailySchedule, getDosageHistory, getMedicines, getMedicinesWithDaysLeft, getPastSchedule, getSchedules, takeDose, takeDoseForDate)
 
 import Http
-import Models.DailySchedule exposing (DailySchedule, dailyScheduleDecoder, DailyScheduleWithDate, dailyScheduleWithDateDecoder)
+import Models.DailySchedule exposing (DailySchedule, DailyScheduleWithDate, dailyScheduleDecoder, dailyScheduleWithDateDecoder)
 import Models.Dosagehistory exposing (DosageHistories, dosageHistoriesDecoder)
-import Models.Medicines exposing (Medicines, medicineListDecoder, medicinesWithDaysLeftDecoder)
+import Models.Medicines exposing (Medicines, MedicinesWithDaysLeft, medicineListDecoder, medicinesWithDaysLeftDecoder)
 import Models.Schedules exposing (Schedules, scheduleListDecoder)
-import Models.Medicines exposing (MedicinesWithDaysLeft)
+
 
 backendUrl : String
-backendUrl = "http://localhost:8080"
+backendUrl =
+    "http://localhost:8080"
+
 
 getMedicines : { onResponse : Result Http.Error Medicines -> msg } -> Cmd msg
 getMedicines options =
@@ -58,13 +60,15 @@ takeDose options =
         , expect = Http.expectJson options.onResponse dailyScheduleDecoder
         }
 
-takeDoseForDate : { onResponse : Result Http.Error DailyScheduleWithDate -> msg, time: String, date: String } -> Cmd msg
+
+takeDoseForDate : { onResponse : Result Http.Error DailyScheduleWithDate -> msg, time : String, date : String } -> Cmd msg
 takeDoseForDate options =
     Http.post
         { url = backendUrl ++ "/schedules/takedose?date=" ++ options.date ++ "&time=" ++ options.time
         , body = Http.emptyBody
         , expect = Http.expectJson options.onResponse dailyScheduleWithDateDecoder
         }
+
 
 getPastSchedule : { onResponse : Result Http.Error DailyScheduleWithDate -> msg } -> Cmd msg
 getPastSchedule options =

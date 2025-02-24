@@ -11,8 +11,9 @@ import Page exposing (Page)
 import Parts.Footer exposing (footerView)
 import Parts.Header exposing (headerView)
 import View exposing (View)
-import Views.Medicines exposing (viewMedicineListRead)
 import Views.DailySchedules exposing (viewDailySchedule)
+import Views.Medicines exposing (viewMedicineListRead)
+
 
 page : Page Model Msg
 page =
@@ -78,6 +79,7 @@ update msg model =
         AddStock _ _ ->
             ( model, Cmd.none )
 
+
 subscriptions : Model -> Sub Msg
 subscriptions _ =
     Sub.none
@@ -94,7 +96,7 @@ medicineContent model =
             div [] [ text "Loading..." ]
 
         Api.Success medicineList ->
-            viewMedicineListRead  medicineList 
+            viewMedicineListRead medicineList
 
         Api.Failure httpError ->
             div [ class "alert alert-danger" ] [ text ("Something went wrong: " ++ Debug.toString httpError) ]
@@ -132,8 +134,8 @@ contentView model =
     div [ class "container-fluid" ]
         [ div [ class "col-md-12" ]
             [ headerView ]
-        , div [ class "row" ] [
-            div [ class "col-md-4" ]
+        , div [ class "row" ]
+            [ div [ class "col-md-4" ]
                 [ welcomeContent ]
             , div [ class "col-md-4 content" ]
                 [ h3 [] [ text "Daily Schedule" ]
@@ -143,7 +145,7 @@ contentView model =
                 [ h3 [] [ text "Medicines" ]
                 , medicineContent model
                 ]
-        ]
+            ]
         , div [ class "col-md-12 footer" ]
             [ footerView ]
         ]

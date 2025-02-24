@@ -4,6 +4,7 @@ import Html exposing (..)
 import Html.Attributes exposing (..)
 import Models.Schedules exposing (Schedule, Schedules)
 
+
 viewSchedule : Schedule -> Html msg
 viewSchedule schedule =
     tr []

@@ -1,4 +1,4 @@
-module Models.Schedules exposing (Schedule, Schedules, CreateSchedule, scheduleListDecoder)
+module Models.Schedules exposing (CreateSchedule, Schedule, Schedules, scheduleListDecoder)
 
 import Json.Decode as Decode exposing (Decoder)
 import Json.Decode.Pipeline exposing (required)
@@ -12,12 +12,14 @@ type alias Schedule =
     , amount : Float
     }
 
+
 type alias CreateSchedule =
     { time : String
     , medicineId : String
     , description : String
     , amount : Float
     }
+
 
 scheduleDecoder : Decoder Schedule
 scheduleDecoder =
@@ -36,4 +38,3 @@ type alias Schedules =
 scheduleListDecoder : Decoder Schedules
 scheduleListDecoder =
     Decode.list scheduleDecoder
-

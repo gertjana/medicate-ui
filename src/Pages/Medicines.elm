@@ -62,16 +62,16 @@ update msg model =
             )
 
         EditMedicine _ ->
-                ( model, Cmd.none )
+            ( model, Cmd.none )
 
         DeleteMedicine _ ->
-                ( model, Cmd.none )
+            ( model, Cmd.none )
 
         AddMedicine ->
-                ( model, Cmd.none )
+            ( model, Cmd.none )
 
         AddStock _ ->
-                ( model, Cmd.none )
+            ( model, Cmd.none )
 
 
 medicineContent : Model -> Html Msg

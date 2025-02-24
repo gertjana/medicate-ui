@@ -2,7 +2,8 @@ module Views.DosageHistory exposing (..)
 
 import Html exposing (..)
 import Html.Attributes exposing (..)
-import Models.Dosagehistory exposing (DosageHistory, DosageHistories)
+import Models.Dosagehistory exposing (DosageHistories, DosageHistory)
+
 
 viewDosageHistory : DosageHistory -> Html msg
 viewDosageHistory dosageHistory =

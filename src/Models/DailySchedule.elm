@@ -8,8 +8,10 @@ import Models.Medicines exposing (Medicine, medicineDecoder)
 type alias MedicineDosage =
     ( Medicine, Float )
 
+
 type alias MedicineDosages =
     List MedicineDosage
+
 
 type alias DailyScheduleEntry =
     { time : String
@@ -17,16 +19,20 @@ type alias DailyScheduleEntry =
     , taken : Bool
     }
 
+
 type alias DailySchedule =
     List DailyScheduleEntry
+
 
 type alias DailyScheduleWithDateEntry =
     { date : String
     , schedule : DailySchedule
     }
 
+
 type alias DailyScheduleWithDate =
     List DailyScheduleWithDateEntry
+
 
 medicineDosageDecoder : Decoder MedicineDosage
 medicineDosageDecoder =
@@ -38,7 +44,6 @@ medicineDosageDecoder =
 medicineDosagesDecoder : Decoder MedicineDosages
 medicineDosagesDecoder =
     Decode.list medicineDosageDecoder
-
 
 
 dailyScheduleEntryDecoder : Decoder DailyScheduleEntry
@@ -60,11 +65,11 @@ dailyScheduleWithDateEntryDecoder =
         |> required "date" Decode.string
         |> required "schedules" dailyScheduleDecoder
 
+
 dailyScheduleWithDateDecoder : Decoder DailyScheduleWithDate
 dailyScheduleWithDateDecoder =
     Decode.list dailyScheduleWithDateEntryDecoder
 
 
+
 -- Views
-
-
