@@ -12,7 +12,7 @@ import Parts.Footer exposing (footerView)
 import Parts.Header exposing (headerView)
 import View exposing (View)
 import Views.DailySchedules exposing (viewDailySchedule)
-import Views.Medicines exposing (viewMedicineListRead)
+import Views.Medicines exposing (viewMedicineList)
 
 
 page : Page Model Msg
@@ -96,7 +96,7 @@ medicineContent model =
             div [] [ text "Loading..." ]
 
         Api.Success medicineList ->
-            viewMedicineListRead medicineList
+            viewMedicineList medicineList
 
         Api.Failure httpError ->
             div [ class "alert alert-danger" ] [ text ("Something went wrong: " ++ Debug.toString httpError) ]

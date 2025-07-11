@@ -6,6 +6,7 @@ module Models.Medicines exposing
     , medicineDecoder
     , medicineListDecoder
     , medicinesWithDaysLeftDecoder
+    , medicineDescription
     , toString
     )
 
@@ -59,6 +60,10 @@ medicineWithDaysLeftDecoder =
     Decode.map2 Tuple.pair
         (Decode.index 0 medicineDecoder)
         (Decode.index 1 Decode.int)
+
+medicineDescription : Medicine -> String
+medicineDescription medicine =
+    medicine.name ++ " (" ++ String.fromFloat medicine.dose ++ " " ++ medicine.unit ++ ")"
 
 
 toString : Medicine -> String

@@ -158,3 +158,7 @@ table.dailyschedule {
   border: 1px solid #7147cb !important;
 }
 
+div.add-stock-form div div:last-child button {
+  position: relative;
+  top: 30px;
+}
